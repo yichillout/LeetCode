@@ -1,31 +1,59 @@
 package com.jasper.dynamicprogramming;
 
+// print the path
 public class LC0064_MinimumPathSum {
 
-	public int minPathSum(int[][] grid) {
+    public int minPathSum(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
 
-		if (grid == null || grid.length == 0 || grid[0].length == 0)
-			return 0;
+        int[][] f = new int[n][m];
+        int[][] pi = new int[n][m]; // pi[i][j] = 1 : from (i - 1, j);  pi[i][j] = 2 : from (i, j - 1);
 
-		int[][] result = new int[grid.length][grid[0].length];
 
-		result[0][0] = grid[0][0];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (i == 0 && j == 0) {
+                    f[i][j] = grid[i][j];
+                    continue;
+                }
 
-		for (int i = 1; i < grid.length; i++) {
-			result[i][0] = result[i - 1][0] + grid[i][0];
-		}
+                f[i][j] = Integer.MAX_VALUE;
+                if (i > 0) {
+                    f[i][j] = Math.min(f[i][j], f[i - 1][j]);
+                    if (f[i][j] == f[i - 1][j]) {
+                        pi[i][j] = 1; // from up
+                    }
+                }
+                if (j > 0) {
+                    f[i][j] = Math.min(f[i][j], f[i][j - 1]);
+                    if (f[i][j] == f[i][j - 1]) {
+                        pi[i][j] = 2; // from left
+                    }
+                }
 
-		for (int j = 1; j < grid[0].length; j++) {
-			result[0][j] = result[0][j - 1] + grid[0][j];
-		}
+                f[i][j] += grid[i][j];
+            }
+        }
 
-		for (int i = 1; i < grid.length; i++) {
-			for (int j = 1; j < grid[0].length; j++) {
-				result[i][j] = grid[i][j] + Math.min(result[i - 1][j], result[i][j - 1]);
-			}
-		}
+        int[] path = new int[m + n - 1];
+        int x = n - 1;
+        int y = m - 1;
+        for (int i = m + n - 2; i >= 0; i--) {
+            path[i] = grid[x][y];
+            if (i > 0) {
+                if (pi[x][y] == 1) {
+                    x--;
+                } else {
+                    y--;
+                }
+            }
+        }
 
-		return result[result.length - 1][result[0].length - 1];
+        for (int i = 0; i < path.length; i++) {
+            System.out.println(path[i]);
+        }
 
-	}
+        return f[n - 1][m - 1];
+    }
 }

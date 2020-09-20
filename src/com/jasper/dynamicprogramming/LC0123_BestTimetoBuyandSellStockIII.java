@@ -2,38 +2,42 @@ package com.jasper.dynamicprogramming;
 
 public class LC0123_BestTimetoBuyandSellStockIII {
 
-	public int maxProfit(int[] prices) {
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        if (n == 0) {
+            return 0;
+        }
 
-		if (prices == null || prices.length < 2) {
-			return 0;
-		}
+        int[][] f = new int[n + 1][5 + 1];
+        int i, j, k;
 
-		// highest profit in 0 ... i
-		int[] left = new int[prices.length];
-		int[] right = new int[prices.length];
+        for (k = 1; k <= 5; k++) {
+            f[0][k] = Integer.MIN_VALUE; //impossible
+        }
 
-		// DP from left to right
-		left[0] = 0;
-		int min = prices[0];
-		for (int i = 1; i < prices.length; i++) {
-			min = Math.min(min, prices[i]);
-			left[i] = Math.max(left[i - 1], prices[i] - min);
-		}
+        f[0][1] = 0;
+        for (i = 1; i <= n; i++) {
+            // phase 1,3,5 ==> f[i][j] = max {f[i - 1][j], f[i - 1][j - 1] + Pi-1 - Pi -2}
+            for (j = 1; j <= 5; j += 2) {
+                f[i][j] = f[i - 1][j];
+                if (j > 1 && i > 1 && f[i - 1][j - 1] != Integer.MIN_VALUE) {
+                    f[i][j] = Math.max(f[i][j], f[i - 1][j - 1] + prices[i - 1] - prices[i - 2]);
+                }
+            }
 
-		// DP from right to left
-		right[prices.length - 1] = 0;
-		int max = prices[prices.length - 1];
-		for (int i = prices.length - 2; i >= 0; i--) {
-			max = Math.max(max, prices[i]);
-			right[i] = Math.max(right[i + 1], max - prices[i]);
-		}
+            // phase 2,4 ==> f[i][j] = max {f[i - 1][j] + Pi-1 - Pi -2, f[i - 1][j - 1]}
+            for (j = 2; j <= 5; j += 2) {
+                f[i][j] = f[i - 1][j - 1];
+                if (i > 1 && f[i - 1][j] != Integer.MIN_VALUE) {
+                    f[i][j] = Math.max(f[i][j], f[i - 1][j] + prices[i - 1] - prices[i - 2]);
+                }
+            }
+        }
 
-		int profit = 0;
-		for (int i = 0; i < prices.length; i++) {
-			profit = Math.max(profit, left[i] + right[i]);
-		}
-
-		return profit;
-	}
-
+        int res = 0;
+        for (j = 1; j <= 5; j += 2) {
+            res = Math.max(res, f[n][j]);
+        }
+        return res;
+    }
 }
