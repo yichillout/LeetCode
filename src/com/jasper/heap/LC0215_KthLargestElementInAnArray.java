@@ -1,7 +1,10 @@
 package com.jasper.heap;
 
+import com.annotation.Template;
+
 import java.util.PriorityQueue;
 
+@Template
 public class LC0215_KthLargestElementInAnArray {
 
 	// 方法1

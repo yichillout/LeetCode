@@ -1,5 +1,8 @@
 package com.jasper.template;
 
+import com.annotation.Template;
+
+@Template
 public class LC0261_GraphValidTree {
 
 	// Union Find

@@ -1,7 +1,10 @@
 package com.jasper.slidingwindow;
 
+import com.annotation.Template;
+
 import java.util.*;
 
+@Template
 public class LC0003_LongestSubstringWithoutRepeatingCharacters {
 
 	// Solution 1

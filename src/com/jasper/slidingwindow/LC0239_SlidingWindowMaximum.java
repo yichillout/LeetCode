@@ -1,8 +1,11 @@
-package com.jasper.template;
+package com.jasper.slidingwindow;
+
+import com.annotation.Template;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+@Template
 public class LC0239_SlidingWindowMaximum {
 
 	// Solution 1

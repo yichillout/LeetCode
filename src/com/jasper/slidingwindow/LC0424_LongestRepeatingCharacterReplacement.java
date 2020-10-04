@@ -1,47 +1,36 @@
 package com.jasper.slidingwindow;
 
 public class LC0424_LongestRepeatingCharacterReplacement {
-	public int characterReplacement(String s, int k) {
-		char[] chars = s.toCharArray();
-		int[] count = new int[26];
-		int result = 0;
 
-		int j = 0;
-		for (int i = 0; i < chars.length; i++) {
-			count[chars[i] - 'A']++;
-			while (!can(count, k)) {
-				count[chars[j] - 'A']--;
-				j++;
-			}
-			if (i - j + 1 > result) {
-				result = i - j + 1;
-			}
+    public int characterReplacement(String s, int k) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
 
-		}
-		return result;
-	}
+        int[] h = new int[26];
+        char[] ss = s.toCharArray();
+        int result = 0;
 
-	private boolean can(int[] count, int k) {
-		int index = -1;
-		int max = 0;
-		int diff = 0;
+        int j = 0;
+        for (int i = 0; i < ss.length; i++) {
+            h[ss[i] - 'A']++;
+            while (!valid(h, k, i, j)) {
+                h[ss[j] - 'A']--;
+                j++;
+            }
+            result = Math.max(result, i - j + 1);
+        }
 
-		for (int i = 0; i < count.length; i++) {
-			if (count[i] > max) {
-				max = count[i];
-				index = i;
-			}
-		}
+        return result;
+    }
 
-		for (int i = 0; i < count.length; i++) {
-			if (i != index) {
-				diff += count[i];
-			}
-		}
-
-		if (diff > k)
-			return false;
-
-		return true;
-	}
+    private boolean valid(int[] h, int k, int i, int j) {
+        int max = 0;
+        for (int t = 0; t < h.length; t++) {
+            if (max < h[t]) {
+                max = h[t];
+            }
+        }
+        return i - j + 1 - max <= k;
+    }
 }
