@@ -9,8 +9,8 @@ public class LC0046_Permutations {
 
 	public List<List<Integer>> permute(int[] nums) {
 
-		List<List<Integer>> res = new ArrayList<List<Integer>>();
-		List<Integer> temp = new ArrayList<Integer>();
+		List<List<Integer>> res = new ArrayList<>();
+		List<Integer> temp = new ArrayList<>();
 		used = new boolean[nums.length];
 
 		permuteHelper(nums, res, temp);
