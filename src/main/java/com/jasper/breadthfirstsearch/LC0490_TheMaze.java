@@ -2,73 +2,62 @@ package com.jasper.breadthfirstsearch;
 
 import java.util.*;
 
-class Point {
-	int x;
-	int y;
-
-	public Point(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-}
 
 public class LC0490_TheMaze {
 
-	public static boolean hasPath(int[][] maze, int[] start, int[] destination) {
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
 
-		if (maze == null || maze.length == 0 || maze[0].length == 0)
-			return false;
+        int N = maze.length;
+        int M = maze[0].length;
 
-		Queue<Point> queue = new LinkedList<Point>();
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[N][M];
 
-		int N = maze.length;
-		int M = maze[0].length;
-		int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-		boolean[][] isVisited = new boolean[N][M];
+        int[][] dir = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-		queue.offer(new Point(start[0], start[1]));
-		isVisited[start[0]][start[1]] = true;
+        queue.offer(start);
+        visited[start[0]][start[1]] = true;
 
-		while (queue.size() != 0) {
-			Point p = queue.poll();
-			int x = p.x;
-			int y = p.y;
+        while (!queue.isEmpty()) {
 
-			for (int i = 0; i < 4; i++) {
+            int size = queue.size();
 
-				int xx = x;
-				int yy = y;
+            for (int i = 0; i < size; i++) {
 
-				while (xx >= 0 && yy >= 0 && xx < N && yy < M
-						&& maze[xx][yy] == 0) {
-					xx += dir[i][0];
-					yy += dir[i][1];
-				}
+                int[] cur = queue.poll();
 
-				xx -= dir[i][0];
-				yy -= dir[i][1];
+                if (cur[0] == destination[0] && cur[1] == destination[1]) {
+                    return true;
+                }
 
-				if (xx == destination[0] && yy == destination[1]) {
-					return true;
-				}
+                for (int j = 0; j < dir.length; j++) {
+                    int[] next = getPosition(cur, dir[j], maze);
 
-				if (isVisited[xx][yy] == false) {
-					queue.offer(new Point(xx, yy));
-					isVisited[xx][yy] = true;
-				}
+                    if (!visited[next[0]][next[1]]) {
+                        queue.offer(next);
+                        visited[next[0]][next[1]] = true;
+                    }
+                }
+            }
+        }
 
-			}
-		}
+        return false;
+    }
 
-		return false;
-	}
+    public int[] getPosition(int[] cur, int[] dir, int[][] maze) {
+        int N = maze.length;
+        int M = maze[0].length;
 
-	public static void main(String[] args) {
-		int[][] maze = { { 0, 0, 1, 0, 0 }, { 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 1, 0 }, { 1, 1, 0, 1, 1 }, { 0, 0, 0, 0, 0 } };
-		int[] start = { 0, 4 };
-		int[] destination = { 4, 4 };
-		System.out.println(hasPath(maze, start, destination));
-	}
+        int x = cur[0];
+        int y = cur[1];
+
+        while (x + dir[0] >= 0 && x + dir[0] < N && y + dir[1] >= 0 && y + dir[1] < M
+                && maze[x + dir[0]][y + dir[1]] == 0) {
+            x += dir[0];
+            y += dir[1];
+        }
+
+        return new int[]{x, y};
+    }
 
 }
