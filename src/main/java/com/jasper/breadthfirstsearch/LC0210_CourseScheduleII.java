@@ -4,57 +4,83 @@ import java.util.*;
 
 public class LC0210_CourseScheduleII {
 
-	int index = 0;
+    /**
+     * @param numCourses
+     * @param prerequisites
+     * @return Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+     * 0 -> 1
+     * 0 -> 2
+     * 1 -> 3
+     * 2 -> 3
+     * <p>
+     * Output: [0,2,1,3]
+     */
 
-	public int[] findOrder(int numCourses, int[][] prerequisites) {
-		HashMap<Integer, List<Integer>> adj = new HashMap<Integer, List<Integer>>();
-		int n = numCourses;
-		index = n - 1;
-		int[][] pre = prerequisites;
-		
-		int[] result = new int[n];
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
 
-		initAdj(n, adj, pre);
+        Map<Integer, List<Integer>> courseMap = buildMap(numCourses, prerequisites);
+        Map<Integer, Integer> inDegrees = buildInDegrees(numCourses, prerequisites);
 
-		int[] color = new int[n];// 0 white 1 gray 2 black
-		for (int i = 0; i < n; i++) {
-			if (!canFinishDFS(adj, color, result, i)) {
-				return new int[0];
-			}
-		}// for i
-		return result;
-	}
+        int[] result = new int[numCourses];
 
-	private void initAdj(int n, HashMap<Integer, List<Integer>> adj, int[][] pre) {
-		for (int i = 0; i < n; i++) {
-			adj.put(i, new LinkedList<Integer>());
-		}
-		for (int i = 0; i < pre.length; i++) {
-			adj.get(pre[i][1]).add(pre[i][0]);
-		}
-	}
+        Queue<Integer> queue = new LinkedList<>();
 
-	private boolean canFinishDFS(HashMap<Integer, List<Integer>> adj,
-			int[] color, int[] result, int i) {
-		if (color[i] == 1)
-			return false;
-		if (color[i] == 2)
-			return true;
-		color[i] = 1;
-		for (Integer j : adj.get(i)) {
-			if (!canFinishDFS(adj, color, result, j)) {
-				return false;
-			}
-		}
-		color[i] = 2;
-		result[index] = i;
-		index--;
-		return true;
-	}
+        int index = 0;
+        for (Map.Entry<Integer, Integer> entry : inDegrees.entrySet()) {
+            if (entry.getValue() == 0) {
+                result[index] = entry.getKey();
+                queue.offer(result[index]);
+                index++;
+            }
+        }
 
-	public static void main(String[] args) {
-		
-		
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int course = queue.poll();
+                List<Integer> nexts = courseMap.get(course);
 
-	}
+                for (int next : nexts) {
+                    inDegrees.put(next, inDegrees.get(next) - 1);
+                    if (inDegrees.get(next) == 0) {
+                        queue.offer(next);
+                        result[index] = next;
+                        index++;
+                    }
+                }
+            }
+        }
+
+        if (index != numCourses) {
+            return new int[]{};
+        }
+
+        return result;
+    }
+
+    public Map<Integer, List<Integer>> buildMap(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = numCourses - 1; i >= 0; i--) {
+            map.put(i, new ArrayList<>());
+        }
+
+        for (int[] p : prerequisites) {
+            map.get(p[1]).add(p[0]);
+        }
+
+        return map;
+    }
+
+    public Map<Integer, Integer> buildInDegrees(int numCourses, int[][] prerequisites) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = numCourses - 1; i >= 0; i--) {
+            map.put(i, 0);
+        }
+
+        for (int[] p : prerequisites) {
+            map.put(p[0], map.get(p[0]) + 1);
+        }
+
+        return map;
+    }
 }

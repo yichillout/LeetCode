@@ -7,8 +7,7 @@ import com.jasper.common.TreeNode;
 public class LC0199_BinaryTreeRightSideView {
 
 	public List<Integer> rightSideView(TreeNode root) {
-
-		List<Integer> result = new ArrayList<Integer>();
+		List<Integer> result = new ArrayList<>();
 		traverse(root, result, 0);
 		return result;
 	}

@@ -19,7 +19,7 @@ public class LC0139_WordBreak {
 
 		match[0] = true;
 
-		for (int i = 1; i < s.length() + 1; i++) { // important!!
+		for (int i = 1; i <= s.length(); i++) {
 			for (int j = 0; j < i; j++) {
 				// 在这里match[j]刚刚好就是之前的那个时候能match
 				if (match[j] && wordDict.contains(s.substring(j, i))) { 

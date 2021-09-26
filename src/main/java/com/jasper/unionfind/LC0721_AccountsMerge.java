@@ -45,10 +45,8 @@ public class LC0721_AccountsMerge {
                 String p = find(entry.getKey());
                 if (!hm.containsKey(p)) {
                     hm.put(p, new ArrayList<String>());
-                    hm.get(p).add(entry.getKey());
-                } else {
-                    hm.get(p).add(entry.getKey());
                 }
+                hm.get(p).add(entry.getKey());
             }
 
             return hm;

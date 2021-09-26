@@ -3,61 +3,104 @@ package com.jasper.array;
 //using counting sort
 public class LC0075_SortColors {
 
-	// Solution 1 : Counting Sort : space is O(n)
-	public static void sortColors1(int[] nums) {
+    // solution 1 : tree way partition
+    // l : the last index of 0
+    // r : the first index of 1
+    public void sortColors1(int[] nums) {
+        int l = -1;
+        int r = nums.length;
+        int i = 0;
 
-		if (nums == null || nums.length == 0)
-			return;
+        while (i < r) {
+            if (nums[i] == 0) {
+                l++;
+                swap(nums, l, i);
+                i++;
+            } else if (nums[i] == 2) {
+                r--;
+                swap(nums, i, r);
+            } else {
+                i++;
+            }
+        }
+    }
 
-		int[] colorCount = new int[3];
-		int[] result = new int[nums.length];
+    // solution 1 : tree way partition (different index version)
+    // l : the index ready for 0
+    // r : the index ready for 1
+    public void sortColors2(int[] nums) {
+        int l = 0;
+        int r = nums.length - 1;
+        int i = 0;
 
-		for (int i = 0; i < nums.length; i++) {
-			colorCount[nums[i]]++;
-		}
+        while (i <= r) {
+            if (nums[i] == 0) {
+                swap(nums, l, i);
+                l++;
+                i++;
+            } else if (nums[i] == 2) {
+                swap(nums, i, r);
+                r--;
+            } else {
+                i++;
+            }
+        }
+    }
 
-		for (int i = 1; i < 3; i++) {
-			colorCount[i] = colorCount[i] + colorCount[i - 1];
-		}
+    public void swap(int[] nums, int x, int y) {
+        int tmp = nums[x];
+        nums[x] = nums[y];
+        nums[y] = tmp;
+    }
 
-		for (int i = 0; i < nums.length; i++) {
-			result[colorCount[nums[i]] - 1] = nums[i];
-			colorCount[nums[i]]--;
-		}
+    // Solution 2 : Counting Sort : space is O(n)
+    public static void sortColors3(int[] nums) {
 
-		for (int i = 0; i < nums.length; i++) {
-			nums[i] = result[i];
-		}
+        if (nums == null || nums.length == 0)
+            return;
 
-	}
+        int[] counts = new int[3];
+        int[] result = new int[nums.length];
 
-	// Solution 2 : Improved Counting Sort : space is O(1)
-	public static void sortColors2(int[] nums) {
-		if (nums == null || nums.length < 2) {
-			return;
-		}
+        for (int i = 0; i < nums.length; i++) {
+            counts[nums[i]]++;
+        }
 
-		int[] countArray = new int[3];
-		for (int i = 0; i < nums.length; i++) {
-			countArray[nums[i]]++;
-		}
+        for (int i = 1; i < 3; i++) {
+            counts[i] = counts[i] + counts[i - 1];
+        }
 
-		int j = 0;
-		int k = 0;
-		while (j <= 2) {
-			if (countArray[j] != 0) {
-				nums[k++] = j;
-				countArray[j]--;
-			} else {
-				j++;
-			}
-		}
-	}
+        for (int i = 0; i < nums.length; i++) {
+            result[counts[nums[i]] - 1] = nums[i];
+            counts[nums[i]]--;
+        }
 
-	public static void main(String[] args) {
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = result[i];
+        }
 
-		int[] nums = { 0, 1, 1, 2, 0, 2, 1, 1, 0 };
-		sortColors1(nums);
+    }
 
-	}
+    // Solution 3 : Improved Counting Sort : space is O(1)
+    public static void sortColors4(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return;
+        }
+
+        int[] counts = new int[3];
+        for (int i = 0; i < nums.length; i++) {
+            counts[nums[i]]++;
+        }
+
+        int j = 0;
+        int k = 0;
+        while (j <= 2) {
+            if (counts[j] != 0) {
+                nums[k++] = j;
+                counts[j]--;
+            } else {
+                j++;
+            }
+        }
+    }
 }

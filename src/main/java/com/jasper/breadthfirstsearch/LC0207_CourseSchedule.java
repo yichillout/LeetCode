@@ -4,6 +4,22 @@ import java.util.*;
 
 public class LC0207_CourseSchedule {
 
+	/**
+	 *
+	 * @param numCourses
+	 * @param prerequisites
+	 * @return
+	 *
+	 * Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+	 * 0 -> 1
+	 * 0 -> 2
+	 * 1 -> 3
+	 * 2 -> 3
+	 *
+	 * Output: [0,2,1,3]
+	 *
+	 */
+
 	public static boolean canFinish(int numCourses, int[][] prerequisites) {
 
 		Map<Integer, List<Integer>> courses = new HashMap<>();
@@ -38,7 +54,7 @@ public class LC0207_CourseSchedule {
 	private static Map<Integer, List<Integer>> build(int numCourses, int[][] prerequisites) {
 		Map<Integer, List<Integer>> courses = new HashMap<>();
 		for (int i = 0; i < numCourses; i++) {
-			courses.put(i, new ArrayList<Integer>());
+			courses.put(i, new ArrayList<>());
 		}
 		for (int[] pre : prerequisites) {
 			courses.get(pre[1]).add(pre[0]);
