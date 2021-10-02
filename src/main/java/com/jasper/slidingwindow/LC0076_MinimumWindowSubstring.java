@@ -18,7 +18,6 @@ public class LC0076_MinimumWindowSubstring {
 		for (int i = 0; i < s.length(); i++) {
 			count[s.charAt(i)]--;
 			while (can(count)) {
-				// System.out.println("j:" + j + "i:" + i + "; srt = " + s.substring(j, i + 1));
 				if (i - j + 1 < minLen) {
 					str = s.substring(j, i + 1);
 					minLen = i - j + 1;

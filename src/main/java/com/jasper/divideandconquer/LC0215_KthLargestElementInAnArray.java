@@ -22,37 +22,37 @@ public class LC0215_KthLargestElementInAnArray {
     }
 
     // solution 2 利用partition的特性
-    public int findKthLargest(int[] nums, int k) {
-        return helper(nums, 0, nums.length - 1, nums.length - k + 1);
+    public int findKthLargest2(int[] nums, int k) {
+        return helper(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    private int helper(int[] nums, int s, int e, int k) {
-        if (s == e)
-            return nums[s];
+    public int helper(int[] nums, int start, int end, int k) {
+        if (start >= end) {
+            return nums[end];
+        }
 
-        int p = nums[s];
-        int j = s + 1;
-        int i = s + 1;
+        int pivot = nums[start];
+        int i = start + 1;
+        int j = start + 1;
 
-        while (i <= e) {
-            if (nums[i] < p) {
+        while (j <= end) {
+            if (nums[j] <= pivot) {
                 swap(nums, j, i);
-                j++;
+                i++;
             }
-            i++;
+            j++;
         }
-        j--;
 
-        swap(nums, j, s);
+        i--;
+        swap(nums, i, start);
 
-        if (j - s + 1 == k) {
-            return nums[j];
-        } else if (j - s + 1 < k) {
-            return helper(nums, j + 1, e, k - (j - s + 1));
+        if (i - start == k) {
+            return nums[i];
+        } else if (i - start < k) {
+            return helper(nums, i + 1, end, k - (i + 1 - start));
         } else {
-            return helper(nums, s, j - 1, k);
+            return helper(nums, start, i - 1, k);
         }
-
     }
 
     private void swap(int[] nums, int index1, int index2) {
@@ -60,5 +60,4 @@ public class LC0215_KthLargestElementInAnArray {
         nums[index1] = nums[index2];
         nums[index2] = tmp;
     }
-
 }

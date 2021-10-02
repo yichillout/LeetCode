@@ -7,30 +7,34 @@ import com.jasper.common.Interval;
 public class LC0253_MeetingRoomsII {
 
     // solution 1 : heap
-    public int minMeetingRooms(Interval[] intervals) {
-        if (intervals == null || intervals.length == 0) {
-            return 0;
-        }
+    public int minMeetingRooms1(int[][] intervals) {
 
-        Arrays.sort(intervals, (Interval a, Interval b) -> a.start - b.start);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((int[] a, int[] b) -> a[1] - b[1]);
 
-        PriorityQueue<Interval> heap = new PriorityQueue<>(intervals.length, (Interval o1, Interval o2) -> o1.end - o2.end);
+        Arrays.sort(intervals, (int[] a, int[] b) -> {
+            if (a[0] == b[0]) {
+                return a[1] - b[1];
+            }
+            return a[0] - b[0];
+        });
 
-        heap.offer(intervals[0]);
-
-        for (int i = 1; i < intervals.length; i++) {
-            Interval interval = heap.poll();
-
-            if (intervals[i].start >= interval.end) {
-                interval.end = intervals[i].end;
-            } else {
-                heap.offer(intervals[i]);
+        for (int[] interval : intervals) {
+            if (pq.isEmpty()) {
+                pq.offer(interval);
+                continue;
             }
 
-            heap.offer(interval);
+            if (pq.peek()[1] > interval[0]) {
+                pq.offer(interval);
+            } else if (pq.peek()[1] <= interval[0] && pq.peek()[1] < interval[1]) {
+                int[] tmp = pq.poll();
+                tmp[1] = interval[1];
+                pq.offer(tmp);
+            }
+
         }
 
-        return heap.size();
+        return pq.size();
     }
 
     // solution 2 : sweep line
@@ -56,7 +60,7 @@ public class LC0253_MeetingRoomsII {
         }
     }
 
-    public int minMeetingRooms(int[][] intervals) {
+    public int minMeetingRooms2(int[][] intervals) {
 
         int res = 0;
         int cur = 0;

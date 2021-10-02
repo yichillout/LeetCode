@@ -20,7 +20,7 @@ public class LC0347_TopKFrequentElements {
 	}
 
 	// Solution 1
-	public List<Integer> topKFrequent(int[] nums, int k) {
+	public List<Integer> topKFrequent1(int[] nums, int k) {
 
 		List<Integer> list = new ArrayList<>();
 		Map<Integer, Integer> map = new HashMap<>();
@@ -48,5 +48,32 @@ public class LC0347_TopKFrequentElements {
 		}
 
 		return list;
+	}
+
+	public List<Integer> topKFrequent2(int[] nums, int k) {
+
+		List<Integer>[] bucket = new List[nums.length + 1];
+		Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
+
+		for (int n : nums) {
+			frequencyMap.put(n, frequencyMap.getOrDefault(n, 0) + 1);
+		}
+
+		for (int key : frequencyMap.keySet()) {
+			int frequency = frequencyMap.get(key);
+			if (bucket[frequency] == null) {
+				bucket[frequency] = new ArrayList<>();
+			}
+			bucket[frequency].add(key);
+		}
+
+		List<Integer> res = new ArrayList<>();
+
+		for (int pos = bucket.length - 1; pos >= 0 && res.size() < k; pos--) {
+			if (bucket[pos] != null) {
+				res.addAll(bucket[pos]);
+			}
+		}
+		return res;
 	}
 }

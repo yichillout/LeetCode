@@ -5,34 +5,37 @@ import java.util.List;
 
 public class LC0163_MissingRanges {
 
-	public static List<String> findMissingRanges(int[] nums, int lower, int upper) {
+    public List<String> findMissingRanges(int[] nums, int lower, int upper) {
 
-		List<String> result = new ArrayList<String>();
-		int pre = lower - 1;
-		for (int i = 0; i <= nums.length; i++) {
-			int after;
+        List<String> result = new ArrayList<>();
 
-			if (i == nums.length) {
-				after = upper + 1;
-			} else {
-				after = nums[i];
-			}
+        if (nums == null || nums.length == 0) {
+            addRange(result, lower, upper);
+            return result;
+        }
 
-			if (pre + 2 == after) {
-				result.add(String.valueOf(pre + 1));
-			} else if (pre + 2 < after) {
-				result.add(String.valueOf(pre + 1) + "->" + String.valueOf(after - 1));
-			}
+        addRange(result, lower, (long) nums[0] - 1);
 
-			pre = after;
-		}
+        for (int i = 1; i < nums.length; i++) {
+            addRange(result, (long) nums[i - 1] + 1, (long) nums[i] - 1);
+        }
 
-		return result;
-	}
+        addRange(result, (long) nums[nums.length - 1] + 1, upper);
 
-	public static void main(String[] args) {
-		int[] nums = { 0, 1, 3, 50, 75 };
-		System.out.println(findMissingRanges(nums, 0, 99));
-	}
+        return result;
+    }
+
+    private void addRange(List<String> result, long x, long y) {
+        if (x > y) {
+            return;
+        }
+
+        if (x == y) {
+            result.add(x + "");
+            return;
+        }
+
+        result.add(x + "->" + y);
+    }
 
 }

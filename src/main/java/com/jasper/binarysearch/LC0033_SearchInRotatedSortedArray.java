@@ -2,53 +2,52 @@ package com.jasper.binarysearch;
 
 public class LC0033_SearchInRotatedSortedArray {
 
-	public static int search(int[] nums, int target) {
+    // solution 1
+    public static int search1(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
 
-		if (nums == null || nums.length == 0)
-			return -1;
+        int start = 0;
+        int end = nums.length - 1;
+        int mid;
 
-		int lo = 0;
-		int hi = nums.length - 1;
-		int mid = 0;
+        while (start + 1 < end) {
+            mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            if (nums[start] < nums[mid]) { // situation 1, red line
+                // here is ascending [start, mid]
+                if (nums[start] <= target && target <= nums[mid]) {
+                    end = mid;
+                } else {
+                    start = mid;
+                }
+            } else { // situation 2, green line
+                // here is ascending [mid, start]
+                if (nums[mid] <= target && target <= nums[end]) {
+                    start = mid;
+                } else {
+                    end = mid;
+                }
+            }
+        }
 
-		while (lo < hi) {
-			mid = lo + (hi - lo) / 2;
-			if (nums[mid] < nums[hi]) {
-				hi = mid;
-			} else {
-				lo = mid + 1;
-			}
-		}
+        if (nums[start] == target) {
+            return start;
+        }
+        if (nums[end] == target) {
+            return end;
+        }
+        return -1;
+    }
 
-		if (lo == 0) {
-			hi = nums.length - 1;
-		} else if (target >= nums[0]) {
-			hi = lo - 1;
-			lo = 0;
-		} else {
-			hi = nums.length - 1;
-		}
+    public static void main(String[] args) {
+        // int[] nums = { 3, 1 };
+        // int[] nums = { 6, 7, 0, 1, 2, 4, 5 };
+        int[] nums = {3, 5, 1};
+        System.out.println(search1(nums, 5));
 
-		while (lo < hi) {
-			mid = (lo + hi) / 2;
-			if (nums[mid] >= target) {
-				hi = mid;
-			} else {
-				lo = mid + 1;
-			}
-		}
-
-		if (nums[lo] != target)
-			return -1;
-
-		return lo;
-	}
-
-	public static void main(String[] args) {
-		// int[] nums = { 3, 1 };
-		// int[] nums = { 6, 7, 0, 1, 2, 4, 5 };
-		int[] nums = { 3, 5, 1 };
-		System.out.println(search(nums, 5));
-
-	}
+    }
 }
