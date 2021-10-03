@@ -1,47 +1,77 @@
 package com.jasper.array;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.jasper.common.Interval;
 
 public class LC0057_InsertInterval {
 
-	public static List<Interval> insert(List<Interval> intervals,
-			Interval newInterval) {
+    // solution 1
+    public int[][] insert1(int[][] intervals, int[] newInterval) {
 
-		if (intervals == null || newInterval == null)
-			return intervals;
+        Arrays.sort(intervals, (int[] i1, int[] i2) -> {
+            if (i1[0] == i2[0]) {
+                return i1[1] = i2[1];
+            }
 
-		List<Interval> result = new ArrayList<Interval>();
+            return i1[0] - i2[0];
+        });
 
-		int index = 0;
+        List<int[]> result = new ArrayList<>();
+        int[] tmp = newInterval;
 
-		for (Interval interval : intervals) {
-			if (interval.end < newInterval.start) {
-				result.add(interval);
-				index++;
-			} else if (interval.start > newInterval.end) {
-				result.add(interval);
-			} else {
-				newInterval.start = Math.min(interval.start, newInterval.start);
-				newInterval.end = Math.max(interval.end, newInterval.end);
-			}
-		}
+        for (int i = 0; i < intervals.length; i++) {
+            if (intervals[i][0] > tmp[1]) {
+                // tmp        [x   y]
+                // interval           [a    b]
+                result.add(tmp);
+                tmp = intervals[i];
+            } else if (intervals[i][1] >= tmp[0]) {
+                // tmp             [x   y]
+                // interval   [a    b]
+                int start = Math.min(intervals[i][0], tmp[0]);
+                int end = Math.max(intervals[i][1], tmp[1]);
+                tmp = new int[]{start, end};
+            } else {
+                // tmp                  [x   y]
+                // interval   [a    b]
+                result.add(intervals[i]);
+            }
+        }
 
-		result.add(index, newInterval);
-		return result;
-	}
+        result.add(tmp);
 
-	public static void main(String[] args) {
+        return result.toArray(new int[result.size()][2]);
+    }
 
-		List<Interval> inputArray = new ArrayList<Interval>();
-		inputArray.add(new Interval(1, 2));
-		inputArray.add(new Interval(3, 5));
-		inputArray.add(new Interval(6, 7));
-		inputArray.add(new Interval(8, 10));
-		inputArray.add(new Interval(12, 16));
+    // solution 2
+    public int[][] insert2(int[][] intervals, int[] newInterval) {
 
-		List<Interval> outputArray = insert(inputArray, new Interval(4, 9));
-	}
+        if (intervals == null || newInterval == null) {
+            return new int[0][2];
+        }
+
+        List<int[]> result = new ArrayList<>();
+
+        int index = 0;
+
+        for (int[] interval : intervals) {
+            if (interval[0] > newInterval[1]) {
+                result.add(interval);
+            } else if (interval[1] >= newInterval[0]) {
+                int start = Math.min(interval[0], newInterval[0]);
+                int end = Math.max(interval[1], newInterval[1]);
+                newInterval = new int[]{start, end};
+            } else {
+                result.add(interval);
+                index++;
+            }
+        }
+
+        result.add(index, newInterval);
+
+        return result.toArray(new int[result.size()][2]);
+    }
 }
