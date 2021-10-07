@@ -7,32 +7,32 @@ public class LC0438_FindAllAnagramsInAString {
 
     // solution 1 : sliding window TODO
     public List<Integer> findAnagrams1(String s, String p) {
-        int[] freq = new int[256];
+            int[] freq = new int[256];
 
-        for (int i = 0; i < p.length(); i++) {
-            freq[p.charAt(i)]++;
-        }
-
-        List<Integer> result = new ArrayList<>();
-        int diff = p.length();
-
-        for (int i = 0, j = 0; i < s.length(); i++) {
-            if (freq[s.charAt(i)] > 0) {
-                freq[s.charAt(i)]--;
-                diff--;
+            for (int i = 0; i < p.length(); i++) {
+                freq[p.charAt(i)]++;
             }
 
-            while (diff == 0) {
-                if (i - j + 1 == p.length()) { // Here is the key!
-                    result.add(j);
+            List<Integer> result = new ArrayList<>();
+            int diff = p.length();
+
+            for (int i = 0, j = 0; i < s.length(); i++) {
+                if (freq[s.charAt(i)] > 0) {
+                    freq[s.charAt(i)]--;
+                    diff--;
                 }
 
-                if (++freq[s.charAt(j++)] > 0) {
-                    diff++;
+                while (diff == 0) {
+                    if (i - j + 1 == p.length()) { // Here is the key!
+                        result.add(j);
+                    }
+
+                    if (++freq[s.charAt(j++)] > 0) {
+                        diff++;
+                    }
                 }
             }
-        }
-        return result;
+            return result;
     }
 
     // solution 2

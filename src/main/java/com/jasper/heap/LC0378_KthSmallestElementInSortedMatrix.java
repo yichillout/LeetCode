@@ -1,47 +1,37 @@
 package com.jasper.heap;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-
-class Pair {
-	int row;
-	int col;
-	int val;
-
-	public Pair(int row, int col, int val) {
-		this.row = row;
-		this.col = col;
-		this.val = val;
-	}
-}
-
-class PairComparator implements Comparator<Pair> {
-	public int compare(Pair p1, Pair p2) {
-		return p1.val - p2.val;
-	}
-}
-
 public class LC0378_KthSmallestElementInSortedMatrix {
 
-	public int kthSmallest(int[][] matrix, int k) {
+    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        int l = matrix[0][0];
+        int r = matrix[n - 1][n - 1];
 
-		PriorityQueue<Pair> pq = new PriorityQueue<>(k, new PairComparator());
+        while (l <= r) {
+            int mi = l + ((r - l) >> 1);
+            int count = countLessOrEqual(mi, matrix);
+            if (count < k) {
+                l = mi + 1;
+            } else {
+                r = mi - 1;
+            }
+        }
 
-		for (int i = 0; i < matrix.length; i++) {
-			if (matrix[i].length != 0) {
-				pq.offer(new Pair(i, 0, matrix[i][0]));
-			}
-		}
+        return l;
+    }
 
-		for (int i = 0; i < k - 1; i++) {
-			Pair pair = pq.poll();
-			if (pair.col + 1 < matrix[0].length) {
-				pair.col++;
-				pair.val = matrix[pair.row][pair.col];
-				pq.offer(pair);
-			}
-		}
+    int countLessOrEqual(int x, int[][] matrix) {
+        int count = 0;
+        int N = matrix.length;
+        int M = matrix[0].length - 1; // start with the rightmost column
 
-		return pq.peek().val;
-	}
+        for (int r = 0; r < N; r++) {
+            while (M >= 0 && matrix[r][M] > x) {
+                M--;  // decrease column until matrix[r][c] <= x
+            }
+
+            count += (M + 1);
+        }
+        return count;
+    }
 }

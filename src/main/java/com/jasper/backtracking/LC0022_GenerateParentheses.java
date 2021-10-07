@@ -16,10 +16,13 @@ public class LC0022_GenerateParentheses {
             return;
         }
 
-        if (open < max)
+        if (open < max) {
             backtrack(list, str + "(", open + 1, close, max);
-        if (close < open)
+        }
+
+        if (close < open) {
             backtrack(list, str + ")", open, close + 1, max);
+        }
     }
 
 }

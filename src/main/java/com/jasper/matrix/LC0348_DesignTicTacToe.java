@@ -30,8 +30,6 @@ class TicTacToe {
      * 2: Player 2 wins.
      */
     public int move(int row, int col, int player) {
-
-
         if (player == 1) {
             rows[row]++;
             cols[col]++;
@@ -41,7 +39,6 @@ class TicTacToe {
             if (col == (n - 1 - row)) {
                 antDiagonal++;
             }
-
         } else {
             rows[row]--;
             cols[col]--;
@@ -52,7 +49,6 @@ class TicTacToe {
                 antDiagonal--;
             }
         }
-
 
         if (rows[row] == n || cols[col] == n || diagonal == n || antDiagonal == n) {
             return 1;

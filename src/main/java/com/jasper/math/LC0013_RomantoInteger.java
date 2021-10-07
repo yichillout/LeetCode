@@ -4,36 +4,28 @@ import java.util.*;
 
 public class LC0013_RomantoInteger {
 
-	public int romanToInt(String s) {
+    public static int romanToInt(String s) {
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
 
-		Map<Character, Integer> map = new HashMap<>();
-		map.put('I', 1);
-		map.put('V', 5);
-		map.put('X', 10);
-		map.put('L', 50);
-		map.put('C', 100);
-		map.put('D', 500);
-		map.put('M', 1000);
+        int len = s.length();
+        int result = map.get(s.charAt(len - 1));
 
-		if (s == null || s.length() == 0) {
-			return 0;
-		}
+        for (int i = len - 2; i >= 0; i--) {
+            if (map.get(s.charAt(i)) >= map.get(s.charAt(i + 1))) {
+                result += map.get(s.charAt(i));
+            } else {
+                result -= map.get(s.charAt(i));
+            }
+        }
 
-		char[] ss = s.toCharArray();
-		int n = ss.length;
+        return result;
+    }
 
-		int res = 0;
-		res += map.get(ss[n - 1]);
-
-		for (int i = n - 2; i >= 0; i--) {
-			System.out.println(res);
-			if (map.get(ss[i + 1]) > map.get(ss[i])) {
-				res -= map.get(ss[i]);
-			} else {
-				res += map.get(ss[i]);
-			}
-		}
-
-		return res;
-	}
 }

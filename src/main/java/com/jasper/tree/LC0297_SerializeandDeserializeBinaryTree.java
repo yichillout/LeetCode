@@ -2,52 +2,110 @@ package com.jasper.tree;
 
 import com.jasper.common.TreeNode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class LC0297_SerializeandDeserializeBinaryTree {
 
-	// Encodes a tree to a single string.
-	public static String serialize(TreeNode root) {
-		if (root == null)
-			return null;
+    /**
+     * solution 1 : DFS
+     * <p>
+     * 1
+     * 2   3
+     * 4   5
+     * <p>
+     * 1,2,#,#,3,4,#,#,5,#,#
+     */
 
-		StringBuilder sb = new StringBuilder();
-		serializeHelper(sb, root);
-		return sb.toString().substring(0, sb.length() - 1);
-	}
+    public String serialize1(TreeNode root) {
+        StringBuilder builder = new StringBuilder();
+        serializeHelper(builder, root);
+        return builder.substring(0, builder.length() - 1);
+    }
 
-	public static void serializeHelper(StringBuilder sb, TreeNode node) {
-		if (node != null) {
-			sb.append(node.val + ",");
-			serializeHelper(sb, node.left);
-			serializeHelper(sb, node.right);
-		} else {
-			sb.append("#,");
-		}
-	}
+    public void serializeHelper(StringBuilder builder, TreeNode node) {
+        if (node == null) {
+            builder.append("#,");
+            return;
+        }
 
-	// Decodes your encoded data to tree.
-	public static TreeNode deserialize(String data) {
-		if (data == null)
-			return null;
+        builder.append(node.val + ",");
+        serializeHelper(builder, node.left);
+        serializeHelper(builder, node.right);
+    }
 
-		int[] t = { 0 };
-		String[] arr = data.split(",");
+    public TreeNode deserialize1(String data) {
+        String[] d = data.split(",");
+        int[] index = new int[]{0};
+        return deserializeHelper(d, index);
+    }
 
-		return helper(arr, t);
-	}
+    public TreeNode deserializeHelper(String[] d, int[] index) {
+        if (d[index[0]].equals("#")) {
+            return null;
+        }
 
-	public static TreeNode helper(String[] arr, int[] t) {
-		if (arr[t[0]].equals("#")) {
-			return null;
-		}
+        TreeNode node = new TreeNode(Integer.parseInt(d[index[0]]));
+        index[0]++;
+        node.left = deserializeHelper(d, index);
+        index[0]++;
+        node.right = deserializeHelper(d, index);
 
-		TreeNode root = new TreeNode(Integer.parseInt(arr[t[0]]));
+        return node;
+    }
 
-		t[0] = t[0] + 1;
-		root.left = helper(arr, t);
-		t[0] = t[0] + 1;
-		root.right = helper(arr, t);
+    // solution 2 : BFS
+    public String serialize2(TreeNode root) {
+        if (root == null) return "";
+        Queue<TreeNode> qu = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        qu.offer(root);
+        sb.append(String.valueOf(root.val));
+        sb.append(' ');
+        while (!qu.isEmpty()) {
+            TreeNode x = qu.poll();
+            if (x.left == null) sb.append("null ");
+            else {
+                qu.offer(x.left);
+                sb.append(String.valueOf(x.left.val));
+                sb.append(' ');
+            }
+            if (x.right == null) sb.append("null ");
+            else {
+                qu.offer(x.right);
+                sb.append(String.valueOf(x.right.val));
+                sb.append(' ');
+            }
+        }
+        return sb.toString();
+    }
 
-		return root;
-	}
-
+    public TreeNode deserialize2(String data) {
+        if (data.length() == 0) return null;
+        String[] node = data.split(" ");
+        Queue<TreeNode> qu = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.valueOf(node[0]));
+        qu.offer(root);
+        int i = 1;
+        while (!qu.isEmpty()) {
+            Queue<TreeNode> nextQu = new LinkedList<>();
+            while (!qu.isEmpty()) {
+                TreeNode x = qu.poll();
+                if (node[i].equals("null")) x.left = null;
+                else {
+                    x.left = new TreeNode(Integer.valueOf(node[i]));
+                    nextQu.offer(x.left);
+                }
+                i++;
+                if (node[i].equals("null")) x.right = null;
+                else {
+                    x.right = new TreeNode(Integer.valueOf(node[i]));
+                    nextQu.offer(x.right);
+                }
+                i++;
+            }
+            qu = nextQu;
+        }
+        return root;
+    }
 }
