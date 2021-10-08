@@ -2,46 +2,44 @@ package com.jasper.backtracking;
 
 public class LC0052_N_QueensII {
 
-	int count = 0;
+    int sum = 0;
 
-	public int totalNQueens(int n) {
-		int[] x = new int[n];
-		queens(x, n, 0);
-		return count;
-	}
+    public int totalNQueens(int n) {
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i][j] = '.';
+            }
+        }
 
-	void queens(int[] x, int n, int row) {
-		for (int i = 0; i < n; i++) {
-			if (check(x, n, row, i)) {// 判断合法
-				x[row] = i;// 将皇后放在第row行，第i列
-				if (row == n - 1) {// 如果是最后一行，则输出结果
-					count++;
-					x[row] = 0;// 回溯，寻找下一个结果
-					return;
-				}
-				queens(x, n, row + 1);// 寻找下一行
-				x[row] = 0;// 回溯
-			}
-		}
-	}
+        helper(board, 0);
+        return sum;
+    }
 
-	/**
-	 * @param x      数组解
-	 * @param n      棋盘长宽
-	 * @param index  当前放置行
-	 * @param i      当前放置列
-	 * @return
-	 */
-	boolean check(int[] x, int n, int row, int col) {
-		for (int i = 0; i < row; i++) {
-			if (x[i] == col || x[i] + i == col + row || x[i] - i == col - row)
-				return false;
-		}
-		return true;
-	}
+    public void helper(char[][] board, int rowIndex) {
+        if (rowIndex == board.length) {
+            sum++;
+            return;
+        }
 
-	public static void main(String[] args) {
+        for (int i = 0; i < board[0].length; i++) {
+            if (isValid(board, rowIndex, i)) {
+                board[rowIndex][i] = 'Q';
+                helper(board, rowIndex + 1);
+                board[rowIndex][i] = '.';
+            }
+        }
+    }
 
-	}
+    public boolean isValid(char[][] board, int rowIndex, int colIndex) {
+        for (int i = 0; i < rowIndex; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == 'Q' && (j + rowIndex == i + colIndex || i + j == rowIndex + colIndex || j == colIndex)) {
+                    return false;
+                }
+            }
+        }
 
+        return true;
+    }
 }

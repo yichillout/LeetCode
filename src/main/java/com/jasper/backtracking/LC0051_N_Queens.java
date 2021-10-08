@@ -4,57 +4,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LC0051_N_Queens {
-	public List<List<String>> solveNQueens(int n) {
 
-		char[][] board = new char[n][n];
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				board[i][j] = '.';
-			}
-		}
+    public List<List<String>> solveNQueens(int n) {
 
-		List<List<String>> res = new ArrayList();
+        List<List<String>> result = new ArrayList<>();
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i][j] = '.';
+            }
+        }
 
-		dfs(board, 0, res);
+        helper(board, 0, result);
 
-		return res;
+        return result;
+    }
 
-	}
+    public void helper(char[][] board, int rowIndex, List<List<String>> result) {
 
-	private void dfs(char[][] board, int colIndex, List<List<String>> res) {
+        if (rowIndex == board.length) {
+            List<String> list = new ArrayList<>();
+            for (char[] b : board) {
+                list.add(new String(b));
+            }
+            result.add(list);
+            return;
+        }
 
-		if (colIndex == board[0].length) {
-			List<String> list = build(board);
-			res.add(list);
-			return;
-		}
 
-		for (int i = 0; i < board.length; i++) {
-			if (validate(board, i, colIndex)) {
-				board[i][colIndex] = 'Q';
-				dfs(board, colIndex + 1, res);
-				board[i][colIndex] = '.';
-			}
-		}
+        for (int i = 0; i < board[0].length; i++) {
+            if (isValid(board, rowIndex, i)) {
+                board[rowIndex][i] = 'Q';
+                helper(board, rowIndex + 1, result);
+                board[rowIndex][i] = '.';
+            }
+        }
+    }
 
-	}
+    public boolean isValid(char[][] board, int rowIndex, int colIndex) {
+        for (int i = 0; i < rowIndex; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == 'Q' && (j + rowIndex == i + colIndex || i + j == rowIndex + colIndex || j == colIndex)) {
+                    return false;
+                }
+            }
+        }
 
-	private boolean validate(char[][] board, int x, int y) {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < y; j++) {
-				if (board[i][j] == 'Q' && (x + j == y + i || x + y == i + j || x == i))
-					return false;
-			}
-		}
-
-		return true;
-	}
-
-	private List<String> build(char[][] board) {
-		List<String> list = new ArrayList<>();
-		for (int i = 0; i < board.length; i++) {
-			list.add(new String(board[i]));
-		}
-		return list;
-	}
+        return true;
+    }
 }
