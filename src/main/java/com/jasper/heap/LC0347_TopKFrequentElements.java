@@ -9,71 +9,82 @@ import java.util.PriorityQueue;
 
 public class LC0347_TopKFrequentElements {
 
-	class Item {
-		int val;
-		int freq;
+    class Item {
+        int val;
+        int freq;
 
-		public Item(int val, int freq) {
-			this.val = val;
-			this.freq = freq;
-		}
-	}
+        public Item(int val, int freq) {
+            this.val = val;
+            this.freq = freq;
+        }
+    }
 
-	// Solution 1
-	public List<Integer> topKFrequent1(int[] nums, int k) {
+    // Solution 1 : priority queue
+    public List<Integer> topKFrequent1(int[] nums, int k) {
 
-		List<Integer> list = new ArrayList<>();
-		Map<Integer, Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
 
-		PriorityQueue<Item> pq = new PriorityQueue<>(new Comparator<Item>() {
-			public int compare(Item item1, Item item2) {
-				return item2.freq - item1.freq;
-			}
-		});
+        PriorityQueue<Item> pq = new PriorityQueue<>(new Comparator<Item>() {
+            public int compare(Item item1, Item item2) {
+                return item2.freq - item1.freq;
+            }
+        });
 
-		for (int i = 0; i < nums.length; i++) {
-			if (!map.containsKey(nums[i])) {
-				map.put(nums[i], 1);
-			} else {
-				map.put(nums[i], map.get(nums[i]) + 1);
-			}
-		}
+        for (int i = 0; i < nums.length; i++) {
+            if (!map.containsKey(nums[i])) {
+                map.put(nums[i], 1);
+            } else {
+                map.put(nums[i], map.get(nums[i]) + 1);
+            }
+        }
 
-		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-			pq.offer(new Item(entry.getKey(), entry.getValue()));
-		}
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            pq.offer(new Item(entry.getKey(), entry.getValue()));
+        }
 
-		for (int i = 0; i < k; i++) {
-			list.add(pq.poll().val);
-		}
+        for (int i = 0; i < k; i++) {
+            list.add(pq.poll().val);
+        }
 
-		return list;
-	}
+        return list;
+    }
 
-	public List<Integer> topKFrequent2(int[] nums, int k) {
 
-		List<Integer>[] bucket = new List[nums.length + 1];
-		Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
+    // solution 2
+    public int[] topKFrequent2(int[] nums, int k) {
 
-		for (int n : nums) {
-			frequencyMap.put(n, frequencyMap.getOrDefault(n, 0) + 1);
-		}
+        List<Integer> topKList = new ArrayList<>();
 
-		for (int key : frequencyMap.keySet()) {
-			int frequency = frequencyMap.get(key);
-			if (bucket[frequency] == null) {
-				bucket[frequency] = new ArrayList<>();
-			}
-			bucket[frequency].add(key);
-		}
+        Map<Integer, Integer> hm = new HashMap<>();
+        List<Integer>[] freqs = new List[nums.length + 1];
 
-		List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            hm.put(nums[i], hm.getOrDefault(nums[i], 0) + 1);
+        }
 
-		for (int pos = bucket.length - 1; pos >= 0 && res.size() < k; pos--) {
-			if (bucket[pos] != null) {
-				res.addAll(bucket[pos]);
-			}
-		}
-		return res;
-	}
+        for (Map.Entry<Integer, Integer> entry : hm.entrySet()) {
+            if (freqs[entry.getValue()] == null) {
+                freqs[entry.getValue()] = new ArrayList<>();
+            }
+            freqs[entry.getValue()].add(entry.getKey());
+        }
+
+        for (int i = freqs.length - 1; i >= 0; i--) {
+            if (freqs[i] == null) {
+                continue;
+            }
+
+            if (topKList.size() < k) {
+                topKList.addAll(freqs[i]);
+            }
+        }
+
+        int[] result = new int[topKList.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = topKList.get(i);
+        }
+
+        return result;
+    }
 }

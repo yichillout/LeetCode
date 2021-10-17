@@ -18,7 +18,7 @@ public class LC0142_LinkedListCycleII {
 			}
 		}
 
-		// if now cycle
+		// if no cycle
 		if (fast == null || fast.next == null) {
 			return null;
 		}

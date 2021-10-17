@@ -37,6 +37,21 @@ public class LC0986_IntervalListIntersections {
         return r;
     }
 
+    /**
+     *
+     * @param s1
+     * @param e1
+     * @param s2
+     * @param e2
+     * @return
+     *
+     * scenario 1 : s1 <= e2 && e1 >= s2
+     *   [s1     e1]
+     *      [s2       e2]
+     * scenario 2 : s2 <= e1 && e2 >= s1  ====  s1 <= e2 && e1 >= s2
+     *         [s1     e1]
+     *   [s2       e2]
+     */
     public boolean isValid(int s1, int e1, int s2, int e2) {
         return (s1 <= e2 && e1 >= s2) || (s2 <= e1 && e2 >= s1);
     }

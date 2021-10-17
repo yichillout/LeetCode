@@ -33,7 +33,7 @@ public class LC0075_SortColors {
         int r = nums.length - 1;
         int i = 0;
 
-        while (i <= r) {
+        while (i <= r) { // here we need to check i == r, because r is ready for 1 but not check
             if (nums[i] == 0) {
                 swap(nums, l, i);
                 l++;

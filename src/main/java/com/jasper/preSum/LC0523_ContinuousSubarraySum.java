@@ -11,6 +11,8 @@ public class LC0523_ContinuousSubarraySum {
      * @return
      */
 
+    // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/what-is-modular-arithmetic
+
     // solution 1
     public static boolean checkSubarraySum(int[] nums, int k) {
 
@@ -28,20 +30,20 @@ public class LC0523_ContinuousSubarraySum {
             Integer prev = map.get(runningSum);
 
             if (prev != null) {
-                if (i - prev > 1) return true;
+                // has a continuous subarray of size at least two
+                // whose elements sum up to a multiple of k
+                if (i - prev > 1) {
+                    return true;
+                }
             } else {
                 map.put(runningSum, i);
             }
 
-            System.out.println(map);
+
         }
         return false;
     }
 
-    public static void main(String[] args) {
-        int[] nums = new int[]{23, 2, 4, 6, 7};
-        checkSubarraySum(nums, 6);
-    }
 
     // solution 2
     public boolean checkSubarraySum2(int[] nums, int k) {
@@ -66,4 +68,39 @@ public class LC0523_ContinuousSubarraySum {
         }
         return false;
     }
+
+    public static void main(String[] args) {
+        int[] nums = new int[]{23, 2, 4, 6, 7};
+        checkSubarraySum(nums, 6);
+    }
+
+    /**
+     *  Time Limit Exceeded
+     *  94 / 95 test cases passed.
+     *
+     *  public boolean checkSubarraySum(int[] nums, int k) {
+     *         Map<Integer, Integer> map = new HashMap<>();
+     *         map.put(-1, 0);
+     *
+     *         int sum = 0;
+     *         for(int i = 0; i < nums.length; i++) {
+     *             sum += nums[i];
+     *             map.put(i, sum);
+     *
+     *             for(int j = 0; j <= i; j++) {
+     *                 if(i - j < 1) {
+     *                     continue;
+     *                 }
+     *
+     *                 if(j == 0 &&  map.get(i) % k == 0) {
+     *                     return true;
+     *                 } else if((map.get(i) - map.get(j - 1)) % k == 0) {
+     *                     return true;
+     *                 }
+     *             }
+     *         }
+     *
+     *         return false;
+     *     }
+     */
 }

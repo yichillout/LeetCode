@@ -1,9 +1,6 @@
 package com.jasper.breadthfirstsearch;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Input: equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
@@ -14,70 +11,58 @@ import java.util.Map;
 
 public class LC0399_EvaluateDivision {
 
-    public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
 
-        HashMap<String, HashMap<String, Double>> map = new HashMap<>();
+        HashMap<String, Map<String, Double>> map = new HashMap<>();
 
-        for (int i = 0; i < equations.length; ++i) {
+        for (int i = 0; i < equations.size(); i++) {
+            List<String> equation = equations.get(i);
 
-            if (!map.containsKey(equations[i][0]))
-                map.put(equations[i][0], new HashMap<String, Double>());
+            if (!map.containsKey(equation.get(0))) {
+                map.put(equation.get(0), new HashMap<>());
+            }
 
-            if (!map.containsKey(equations[i][1]))
-                map.put(equations[i][1], new HashMap<String, Double>());
+            if (!map.containsKey(equation.get(1))) {
+                map.put(equation.get(1), new HashMap<>());
+            }
 
-            map.get(equations[i][0]).put(equations[i][1], values[i]);
-            map.get(equations[i][1]).put(equations[i][0], 1 / values[i]);
+            map.get(equation.get(0)).put(equation.get(1), values[i]);
+            map.get(equation.get(1)).put(equation.get(0), 1 / values[i]);
         }
 
-        double[] out = new double[queries.length];
+        double[] result = new double[queries.size()];
+        for (int i = 0; i < queries.size(); i++) {
+            result[i] = helper(queries.get(i).get(0), queries.get(i).get(1), map, new HashSet<>(), 1.0);
+        }
 
-        for (int i = 0; i < queries.length; ++i) {
-            if (map.containsKey(queries[i][0]) && map.containsKey(queries[i][1])) {
-                if (queries[i][0] == queries[i][1])
-                    out[i] = 1.0;
-                else {
-                    double judg = dfs(queries[i][0], queries[i][1], new HashSet<String>(), map, 1.0);
-                    if (judg == 0.0) {
-                        out[i] = -1.0;
-                    } else {
-                        out[i] = judg;
-                    }
+        return result;
+
+    }
+
+    public double helper(String start, String end, HashMap<String, Map<String, Double>> map, Set<String> visited, double num) {
+
+        if (!map.containsKey(start)) {
+            return -1.0;
+        }
+
+        if (map.get(start).containsKey(end)) {
+            return map.get(start).get(end) * num;
+        }
+
+        double result = -1.0;
+        visited.add(start);
+        for (String neighor : map.get(start).keySet()) {
+            if (!visited.contains(neighor)) {
+                visited.add(neighor);
+                result = helper(neighor, end, map, visited, num * map.get(start).get(neighor));
+                visited.remove(neighor);
+
+                if (result != -1) {
+                    return result;
                 }
-            } else {
-                out[i] = -1.0;
             }
         }
 
-        return out;
+        return result;
     }
-
-    private double dfs(String s, String t, HashSet<String> visited, HashMap<String, HashMap<String, Double>> map,
-                       double val) {
-
-        if (map.get(s).containsKey(t))
-            return val * map.get(s).get(t);
-
-        double tmp = 0.0;
-
-        for (String neighbor : map.get(s).keySet()) {
-            if (!visited.contains(neighbor)) {
-                visited.add(neighbor);
-                tmp = dfs(neighbor, t, visited, map, val * map.get(s).get(neighbor));
-                if (tmp != 0.0)
-                    break;
-            }
-        }
-
-        return tmp;
-    }
-
-    public static void main(String[] args) {
-        LC0399_EvaluateDivision lc0399_evaluateDivision = new LC0399_EvaluateDivision();
-        String[][] equations = new String[][]{{"a", "b"}, {"b", "c"}};
-        double[] values = new double[]{2.0, 3.0};
-        String[][] queries = {{"a", "c"}, {"b", "a"}, {"a", "e"}, {"a", "a"}, {"x", "x"}};
-        System.out.println(Arrays.toString(lc0399_evaluateDivision.calcEquation(equations, values, queries)));
-    }
-
 }

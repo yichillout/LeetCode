@@ -4,35 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LC0046_Permutations {
+	
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        permuteHelper(nums, res, temp, new boolean[nums.length]);
+        return res;
+    }
 
-	boolean[] used;
+    private void permuteHelper(int[] nums, List<List<Integer>> res, List<Integer> temp, boolean[] used) {
+        if (nums.length == temp.size()) {
+            res.add(new ArrayList<>(temp));
+            return;
+        }
 
-	public List<List<Integer>> permute(int[] nums) {
-
-		List<List<Integer>> res = new ArrayList<>();
-		List<Integer> temp = new ArrayList<>();
-		used = new boolean[nums.length];
-
-		permuteHelper(nums, res, temp);
-
-		return res;
-	}
-
-	private void permuteHelper(int[] nums, List<List<Integer>> res, List<Integer> temp) {
-
-		if (nums.length == temp.size()) {
-			res.add(new ArrayList<Integer>(temp));
-			return;
-		}
-
-		for (int i = 0; i < nums.length; i++) {
-			if (!used[i]) {
-				used[i] = true;
-				temp.add(nums[i]);
-				permuteHelper(nums, res, temp);
-				temp.remove(temp.size() - 1);
-				used[i] = false;
-			}
-		}
-	}
+        for (int i = 0; i < nums.length; i++) {
+            if (!used[i]) {
+                used[i] = true;
+                temp.add(nums[i]);
+                permuteHelper(nums, res, temp, used);
+                temp.remove(temp.size() - 1);
+                used[i] = false;
+            }
+        }
+    }
 }
