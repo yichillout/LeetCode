@@ -27,6 +27,7 @@ public class LC0438_FindAllAnagramsInAString {
                         result.add(j);
                     }
 
+
                     if (++freq[s.charAt(j++)] > 0) {
                         diff++;
                     }

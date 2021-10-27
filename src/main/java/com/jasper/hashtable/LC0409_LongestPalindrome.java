@@ -1,33 +1,25 @@
 package com.jasper.hashtable;
 
-//http://blog.csdn.net/mebiuw/article/details/52724207
 public class LC0409_LongestPalindrome {
-	// ASCII table a:97 A:65
-	// n is the length of string     n - oddCount :  means that all the odd number should become the even number 
-	// n - oddCount + 1 : means that it will keep the longest odd number
-	public int longestPalindrome(String s) {
+    // ASCII table a:97 A:65
 
-		int n = s.length();
-		int oddCount = 0;
-		char[] charList = s.toCharArray();
-		int[] upperCount = new int[26];
-		int[] lowerCount = new int[26];
+    // n is the length of string     n - oddCount :  means that all the odd number should become the even number
+    // n - oddCount + 1 : means that it will keep the longest odd number
+    public int longestPalindrome(String s) {
+        char[] ss = s.toCharArray();
+        int[] freqs = new int[256];
 
-		for (int i = 0; i < n; i++) {
-			if (charList[i] < 'a') {
-				lowerCount[charList[i] - 'A']++;
-			} else {
-				upperCount[charList[i] - 'a']++;
-			}
-		}
+        for (char c : ss) {
+            freqs[c]++;
+        }
 
-		for (int j = 0; j < 26; j++) {
-			if (lowerCount[j] % 2 != 0)
-				oddCount++;
-			if (upperCount[j] % 2 != 0)
-				oddCount++;
-		}
-      if(oddCount ==0) return n;
-		return n - oddCount + 1;
-	}
+        int oddFreqCount = 0;
+        for (int i = 0; i < freqs.length; i++) {
+            if (freqs[i] % 2 == 1) {
+                oddFreqCount++;
+            }
+        }
+
+        return oddFreqCount == 0 ? ss.length : ss.length - oddFreqCount + 1;
+    }
 }

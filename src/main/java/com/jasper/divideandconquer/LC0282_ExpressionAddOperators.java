@@ -4,36 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LC0282_ExpressionAddOperators {
-	public List<String> addOperators(String num, int target) {
-		List<String> rst = new ArrayList<String>();
-		if (num == null || num.length() == 0)
-			return rst;
-		helper(rst, "", num, target, 0, 0, 0);
-		return rst;
-	}
 
-	public void helper(List<String> rst, String path, String num, int target, int pos, long eval, long multed) {
-		if (pos == num.length()) {
-			if (target == eval)
-				rst.add(path);
-			return;
-		}
-		
-		for (int i = pos; i < num.length(); i++) {
-			if (i != pos && num.charAt(pos) == '0')
-				break; // 在这里break的话, 后面肯定达不到pos == num.length(), 所以可以放心
-			 
-			long cur = Long.parseLong(num.substring(pos, i + 1));
-			
-			if (pos == 0) {
-				helper(rst, path + cur, num, target, i + 1, cur, cur);
-			} else {
-				helper(rst, path + "+" + cur, num, target, i + 1, eval + cur, cur);
+    public List<String> addOperators(String num, int target) {
+        List<String> result = new ArrayList<>();
+        helper(result, "", num, target, 0, 0, 0);
+        return result;
+    }
 
-				helper(rst, path + "-" + cur, num, target, i + 1, eval - cur, -cur);
+    public void helper(List<String> result, String path, String num, int target, int index, long curValue, long preValue) {
 
-				helper(rst, path + "*" + cur, num, target, i + 1, eval - multed + multed * cur, multed * cur);
-			}
-		}
-	}
+        if (index == num.length()) {
+            if (curValue == target) {
+                result.add(path);
+            }
+            return;
+        }
+
+        for (int i = index; i < num.length(); i++) {
+            if (i != index && num.charAt(index) == '0') {
+                break;
+            }
+
+            long value = Long.parseLong(num.substring(index, i + 1));
+
+            if (index == 0) {
+                helper(result, path + value, num, target, i + 1, value, value);
+            } else {
+                helper(result, path + "+" + value, num, target, i + 1, curValue + value, value);
+                helper(result, path + "-" + value, num, target, i + 1, curValue - value, -value);
+                helper(result, path + "*" + value, num, target, i + 1, curValue - preValue + preValue * value, preValue * value);
+            }
+        }
+    }
 }

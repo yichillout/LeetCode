@@ -5,19 +5,22 @@ import java.util.Stack;
 public class LC0227_BasicCalculatorII {
 
     public int calculate(String s) {
-        int len;
-        if (s == null || (len = s.length()) == 0) {
+
+        if (s == null || s.length() == 0) {
             return 0;
         }
 
-        Stack<Integer> stack = new Stack<Integer>();
+        Stack<Integer> stack = new Stack<>();
         int num = 0;
         char sign = '+';
-        for (int i = 0; i < len; i++) {
-            if (Character.isDigit(s.charAt(i))) {
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= '0' && c <= '9') {
                 num = num * 10 + s.charAt(i) - '0';
             }
-            if ((!Character.isDigit(s.charAt(i)) && ' ' != s.charAt(i)) || i == len - 1) {
+
+            if (c == '+' || c == '-' || c == '*' || c == '/' || i == s.length() - 1) {
                 if (sign == '-') {
                     stack.push(-num);
                 }
@@ -35,10 +38,11 @@ public class LC0227_BasicCalculatorII {
             }
         }
 
-        int re = 0;
-        for (int i : stack) {
-            re += i;
+        int result = 0;
+        while (!stack.isEmpty()) {
+            result += stack.pop();
         }
-        return re;
+
+        return result;
     }
 }

@@ -17,8 +17,9 @@ public class LC0017_LetterCombinationsOfAPhoneNumber {
         map.put('8', "tuv");
         map.put('9', "wxyz");
 
-        if (digits == null || digits.length() == 0)
+        if (digits == null || digits.length() == 0) {
             return result;
+        }
 
         StringBuilder builder = new StringBuilder();
         letterCombinationsHelper(digits, builder, result, map, 0);

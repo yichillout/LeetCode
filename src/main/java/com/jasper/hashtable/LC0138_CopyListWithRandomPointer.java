@@ -11,6 +11,10 @@ class Node {
     public Node() {
     }
 
+    public Node(int val) {
+        this.val = val;
+    }
+
     public Node(int val, Node next, Node random) {
         this.val = val;
         this.next = next;
@@ -21,30 +25,28 @@ class Node {
 public class LC0138_CopyListWithRandomPointer {
 
     // Solutin 1 : space O(N)
-    public Node copyRandomList1(Node head) {
+    public Node copyRandomList(Node head) {
 
-        if (head == null) {
-            return null;
-        }
-
-        Map<Node, Node> map = new HashMap<>();
+        Map<Node, Node> hm = new HashMap<>();
 
         Node cur = head;
 
         while (cur != null) {
-            map.put(cur, new Node(cur.val, null, null));
+            hm.put(cur, new Node(cur.val));
             cur = cur.next;
         }
 
         cur = head;
-
         while (cur != null) {
-            map.get(cur).next = map.get(cur.next);
-            map.get(cur).random = map.get(cur.random);
+            Node newCur = hm.get(cur);
+            Node newNext = hm.get(cur.next);
+            Node newRandom = hm.get(cur.random);
+            newCur.next = newNext;
+            newCur.random = newRandom;
             cur = cur.next;
         }
 
-        return map.get(head);
+        return hm.get(head);
     }
 
     // Solution 2 : no hashmap
@@ -71,14 +73,13 @@ public class LC0138_CopyListWithRandomPointer {
      * dst: 1'->2'->3'
      */
     public Node copyRandomList2(Node head) {
-
         if (head == null)
             return null;
 
         Node cur = head;
 
         while (cur != null) {
-            Node newNode = new Node(cur.val, null, null);
+            Node newNode = new Node(cur.val);
             newNode.next = cur.next;
             cur.next = newNode;
             cur = cur.next.next;
@@ -92,7 +93,7 @@ public class LC0138_CopyListWithRandomPointer {
             cur = cur.next.next;
         }
 
-        Node dummy = new Node(-1, null, null);
+        Node dummy = new Node(-1);
         Node cur1 = dummy;
 
         cur = head;

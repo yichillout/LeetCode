@@ -3,30 +3,30 @@ package com.jasper.twopointers;
 public class LC0408_ValidWordAbbreviation {
 
     public boolean validWordAbbreviation(String word, String abbr) {
-        if (word == null || abbr == null) {
-            return false;
-        }
 
+        char[] w = word.toCharArray();
+        char[] a = abbr.toCharArray();
+
+        int j = 0;
         int num = 0;
-        int idx = 0;
 
-        for (char c : abbr.toCharArray()) {
+        for (char c : a) {
             if (c == '0' && num == 0) {
                 return false;
             }
 
-            if (c >= '0' && c <= '9') {
-                num = num * 10 + (c - '0');
+            if (c <= '9' && c >= '0') {
+                num = num * 10 + c - '0';
             } else {
-                idx += num;
-                if (idx >= word.length() || c != word.charAt(idx)) {
+                j += num;
+                if (j >= w.length || w[j] != c) {
                     return false;
                 }
+                j++;
                 num = 0;
-                idx++;
             }
         }
 
-        return idx + num == word.length() ? true : false;
+        return j + num == w.length;
     }
 }
