@@ -9,11 +9,11 @@ public class LC0670_MaximumSwap {
         for (int i = 0; i < digits.length - 1; i++) {
             int max = Integer.MIN_VALUE;
             int tmpIndex = -1;
+
             for (int j = i + 1; j < digits.length; j++) {
                 if (max <= digits[j]) {
                     max = digits[j];
                     tmpIndex = j;
-
                 }
             }
 

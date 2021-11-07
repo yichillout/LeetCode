@@ -2,47 +2,33 @@ package com.jasper.twopointers;
 
 public class LC0011_ContainerWithMostWater {
 
-	public static int maxArea(int[] height) {
-		int i, j, lh, rh, area, tmp, len = height.length;
+    public static int maxArea(int[] height) {
+        int l = 0;
+        int r = height.length - 1;
+        int max = 0;
 
-		lh = height[0];
-		rh = height[len - 1];
-		area = 0;
-		i = 0;
-		j = len - 1;
+        while (l < r) {
+            int h = Math.min(height[l], height[r]);
+            int width = r - l;
+            if (h * width > max) {
+                max = h * width;
+            }
 
-		while (i < j) {
-			tmp = Math.min(lh, rh) * (j - i);
+            if (height[l] < height[r]) {
+                l++;
+            } else {
+                r--;
+            }
+        }
 
-			if (tmp > area) {
-				area = tmp;
-			}
+        return max;
+    }
 
-			if (lh < rh) {
-				while (i < j && height[i] <= lh) {
-					i++;
-				}
-				if (i < j) {
-					lh = height[i];
-				}
-			} else {
-				while (i < j && height[j] <= rh) {
-					j--;
-				}
-				if (i < j) {
-					rh = height[j];
-				}
-			}
-		}
+    public static void main(String[] args) {
 
-		return area;
-	}
+        int[] nums = {3, 2, 5};
+        System.out.println(maxArea(nums));
 
-	public static void main(String[] args) {
-
-		int[] nums = { 3, 2, 5 };
-		System.out.println(maxArea(nums));
-
-	}
+    }
 
 }

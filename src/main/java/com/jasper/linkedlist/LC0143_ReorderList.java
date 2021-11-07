@@ -2,70 +2,83 @@ package com.jasper.linkedlist;
 
 import com.jasper.twopointers.ListNode;
 
+import java.util.List;
+
 public class LC0143_ReorderList {
 
-	public static void reorderList(ListNode head) {
-		if (head == null || head.next == null)
-			return;
-		ListNode prevMid = getPreMid(head);
-		ListNode mid = prevMid.next;
-		prevMid.next = null;
-		ListNode reversedTail = reverse(mid);
+    public static void reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return;
+        }
 
-		ListNode left = head, right = reversedTail;
-		ListNode tmp = null;
+        ListNode prevMid = getPreMid(head);
+        ListNode mid = prevMid.next;
+        prevMid.next = null;
+        ListNode reversedTail = reverse(mid);
 
-		while (left.next != null) {
-			tmp = left.next;
-			left.next = right;
-			right = right.next;
-			left = left.next;
-			left.next = tmp;
-			left = left.next;
-		}
-		left.next = right;
-	}
+        ListNode left = head;
+        ListNode right = reversedTail;
+        ListNode tmp = null;
 
-	private static ListNode getPreMid(ListNode head) {
-		ListNode fast = head, slow = head, prev = head;
-		while (fast != null && fast.next != null) {
-			prev = slow;
-			fast = fast.next.next;
-			slow = slow.next;
-		}
-		return prev;
-	}
+        while (left.next != null) {
+            tmp = left.next;
+            left.next = right;
+            right = right.next;
+            left = left.next;
+            left.next = tmp;
+            left = left.next;
+        }
 
-	private static ListNode reverse(ListNode head) {
+        left.next = right;
+    }
 
-		if (head == null || head.next == null)
-			return head;
+    private static ListNode getPreMid(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode prev = head;
 
-		ListNode prev = null;
-		ListNode cur = head;
-		while (cur != null) {
-			ListNode then = cur.next;
-			cur.next = prev;
-			prev = cur;
-			cur = then;
-		}
-		return prev;
-	}
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            fast = fast.next.next;
+            slow = slow.next;
+        }
 
-	public static void main(String[] args) {
-		ListNode node1 = new ListNode(1);
-		ListNode node2 = new ListNode(2);
-		ListNode node3 = new ListNode(3);
-		ListNode node4 = new ListNode(4);
-		ListNode node5 = new ListNode(5);
-		ListNode node6 = new ListNode(6);
+        return prev;
+    }
 
-		node1.next = node2;
-		node2.next = node3;
-		node3.next = node4;
-		node4.next = node5;
-		//node5.next = node6;
+    private static ListNode reverse(ListNode head) {
 
-		reorderList(node1);
-	}
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode prev = null;
+        ListNode cur = head;
+
+        while (cur != null) {
+            ListNode then = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = then;
+        }
+
+        return prev;
+    }
+
+    public static void main(String[] args) {
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        ListNode node6 = new ListNode(6);
+
+        node1.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        //node5.next = node6;
+
+        reorderList(node1);
+    }
 }

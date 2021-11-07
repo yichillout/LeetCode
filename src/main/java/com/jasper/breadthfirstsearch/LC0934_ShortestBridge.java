@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class LC0934_ShortestBridge {
+
 	public int shortestBridge(int[][] A) {
 
 		Queue<int[]> q = new LinkedList<>();

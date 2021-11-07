@@ -8,14 +8,17 @@ import com.jasper.twopointers.ListNode;
 class LC0023_MergekSortedLists {
 
     public ListNode mergeKLists(ListNode[] lists) {
+
         PriorityQueue<ListNode> pq = new PriorityQueue<>((ListNode n1, ListNode n2) -> {
             return n1.val - n2.val;
         });
+
         ListNode dummy = new ListNode(-1);
         ListNode cur = dummy;
 
-        if (lists.length == 0)
+        if (lists.length == 0) {
             return dummy.next;
+        }
 
         for (int i = 0; i < lists.length; i++) {
             if (lists[i] != null) {

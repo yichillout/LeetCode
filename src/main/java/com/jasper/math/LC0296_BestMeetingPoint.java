@@ -8,7 +8,9 @@ public class LC0296_BestMeetingPoint {
 
     // solution 1 : with sorting O(mnlogmn)
     public static int minTotalDistance1(int[][] grid) {
-        List<Integer> rows = new ArrayList<>(), cols = new ArrayList<>();
+        List<Integer> rows = new ArrayList<>();
+        List<Integer> cols = new ArrayList<>();
+
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] == 1) {
@@ -17,62 +19,53 @@ public class LC0296_BestMeetingPoint {
                 }
             }
         }
+
         Collections.sort(cols);
-        return getMinDist(rows) + getMinDist(cols);
+
+        return getMin(rows) + getMin(cols);
     }
 
-    private static int getMinDist(List<Integer> list) {
+    // solution 2 : without sorting O(mn)
+    public int minTotalDistance(int[][] grid) {
 
-        if (list == null || list.size() == 0)
-            return Integer.MAX_VALUE;
+        int m = grid.length;
+        int n = grid[0].length;
 
-        int median = list.get(list.size() / 2);
+        List<Integer> rowBuilders = new ArrayList<>();
+        List<Integer> colBuilders = new ArrayList<>();
 
-        int minDist = 0;
-
-        for (int idx : list) {
-            if (idx < median)
-                minDist += median - idx;
-            else
-                minDist += idx - median;
-        }
-
-        return minDist;
-    }
-
-    // solution 2 : without sorting O(mnlogmn) to O(mn)
-    public int minTotalDistance2(int[][] grid) {
-        int m = grid.length, n = grid[0].length;
-
-        List<Integer> I = new ArrayList<Integer>();
-        List<Integer> J = new ArrayList<Integer>();
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    I.add(i);
+                    rowBuilders.add(i);
                 }
             }
         }
+
         for (int j = 0; j < n; j++) {
             for (int i = 0; i < m; i++) {
                 if (grid[i][j] == 1) {
-                    J.add(j);
+                    colBuilders.add(j);
                 }
             }
         }
-        return minTotalDistance(I) + minTotalDistance(J);
+
+        return getMin(rowBuilders) + getMin(colBuilders);
     }
 
-    public int minTotalDistance(List<Integer> grid) {
-        int i = 0;
-        int j = grid.size() - 1;
+    public static int getMin(List<Integer> buildings) {
+
+        int l = 0;
+        int r = buildings.size() - 1;
+
         int sum = 0;
-        while (i < j) {
-            sum += grid.get(j) - grid.get(i);
-            i++;
-            j--;
+        while (l < r) {
+            sum += buildings.get(r) - buildings.get(l);
+            r--;
+            l++;
         }
+
         return sum;
     }
 

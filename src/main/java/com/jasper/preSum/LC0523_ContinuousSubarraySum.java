@@ -47,7 +47,9 @@ public class LC0523_ContinuousSubarraySum {
 
     // solution 2
     public boolean checkSubarraySum2(int[] nums, int k) {
-        if (nums == null || nums.length == 0) return false;
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
 
         int[] preSum = new int[nums.length + 1];
 

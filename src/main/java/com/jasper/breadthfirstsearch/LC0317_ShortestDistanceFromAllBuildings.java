@@ -7,15 +7,15 @@ public class LC0317_ShortestDistanceFromAllBuildings {
 
     public int shortestDistance(int[][] grid) {
 
-        int N = grid.length;
-        int M = grid[0].length;
+        int m = grid.length;
+        int n = grid[0].length;
 
-        int[][] distance = new int[N][M];
-        int[][] visitedCount = new int[N][M];
+        int[][] distance = new int[m][n];
+        int[][] visitedCount = new int[m][n];
         int buildingCount = 0;
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
                     buildingCount++;
                     bfs(i, j, distance, visitedCount, grid);
@@ -24,8 +24,8 @@ public class LC0317_ShortestDistanceFromAllBuildings {
         }
 
         int min = Integer.MAX_VALUE;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 0 && visitedCount[i][j] == buildingCount) {
                     min = Math.min(min, distance[i][j]);
                 }

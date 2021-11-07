@@ -14,7 +14,7 @@ public class LC0095_UniqueBinarySearchTreesII {
 
 	private List<TreeNode> generateTrees(int lo, int hi) {
 
-		List<TreeNode> res = new ArrayList<TreeNode>();
+		List<TreeNode> res = new ArrayList<>();
 
 		if (lo > hi) {
 			res.add(null);

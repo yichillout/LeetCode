@@ -49,8 +49,6 @@ public class LC0426_ConvertBinarySearchTreeToSortedDoublyLinkedList {
             helper(node.left);
         }
 
-        System.out.println(node.val);
-
         if (prev != null) {
             prev.right = node;
         }

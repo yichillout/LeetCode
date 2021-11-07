@@ -4,27 +4,24 @@ public class LC0157_ReadNCharactersGivenRead4 {
 
     public int read(char[] buf, int n) {
 
-        char[] buffer4 = new char[4];
-        boolean isEnd = false;
-        int readIndex = 0;
+        char[] buffer = new char[4];
+        int size = 0;
 
-        while (readIndex < n && !isEnd) {
-            int count = read4(buffer4);
+        int readSize = read4(buffer);
+        while (readSize != 0 && n > 0) {
+            for (int i = 0; i < readSize; i++) {
+                if (n == 0) {
+                    return size;
+                }
 
-            if (count < 4) {
-                isEnd = true;
+                buf[size] = buffer[i];
+                size++;
+                n--;
             }
-
-            int remainingCount = n - readIndex;
-
-            int needToReadCount = Math.min(remainingCount, count);
-
-            for (int i = 0; i < needToReadCount; i++) {
-                buf[readIndex++] = buffer4[i];
-            }
+            readSize = read4(buffer);
         }
 
-        return readIndex;
+        return size;
     }
 
     /**

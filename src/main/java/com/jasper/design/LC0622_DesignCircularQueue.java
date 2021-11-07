@@ -2,52 +2,83 @@ package com.jasper.design;
 
 class MyCircularQueue {
 
-    final int[] a;
-    int front = -1;
-    int rear = -1;
-    int len = 0;
+    int head;
+    int tail;
+    int size;
+
+    int[] data;
 
     public MyCircularQueue(int k) {
-        a = new int[k];
+        data = new int[k];
+        head = 0;
+        tail = -1;
+        size = 0;
     }
 
-    public boolean enQueue(int val) {
-        if (!isFull()) {
-            rear = (rear + 1) % a.length;
-            a[rear] = val;
-            len++;
-            return true;
-        } else {
+    public boolean enQueue(int value) {
+        if (isFull()) {
             return false;
         }
+
+        tail = (tail + 1) % data.length;
+        data[tail] = value;
+
+        if (head == -1) {
+            head++;
+        }
+
+        size++;
+        return true;
     }
 
     public boolean deQueue() {
-        if (!isEmpty()) {
-            front = (front + 1) % a.length;
-            len--;
-            return true;
-        } else {
+        if (isEmpty()) {
             return false;
         }
+
+        head = (head + 1) % data.length;
+        size--;
+        return true;
     }
 
     public int Front() {
-        return isEmpty() ? -1 : a[front];
+        if (isEmpty()) {
+            return -1;
+        }
+        return data[head];
     }
 
     public int Rear() {
-        return isEmpty() ? -1 : a[rear];
+        if (isEmpty()) {
+            return -1;
+        }
+        return data[tail];
     }
 
     public boolean isEmpty() {
-        return len == 0;
+        return size == 0;
     }
 
     public boolean isFull() {
-        return len == a.length;
+        return size == data.length;
     }
 }
 
 public class LC0622_DesignCircularQueue {
+    /**
+     * ["MyCircularQueue","enQueue","Rear","Front","deQueue","Front","deQueue","Front","enQueue","enQueue","enQueue","enQueue"]
+     * [[3],[2],[],[],[],[],[],[],[4],[2],[2],[3]]
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        MyCircularQueue myCircularQueue = new MyCircularQueue(3);
+        myCircularQueue.enQueue(2);
+        System.out.println(myCircularQueue.Front());
+        System.out.println(myCircularQueue.Rear());
+        myCircularQueue.deQueue();
+        System.out.println(myCircularQueue.Front());
+        System.out.println(myCircularQueue.Rear());
+        myCircularQueue.deQueue();
+    }
 }

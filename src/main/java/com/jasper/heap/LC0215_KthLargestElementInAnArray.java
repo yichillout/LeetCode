@@ -7,61 +7,86 @@ import java.util.PriorityQueue;
 @Template
 public class LC0215_KthLargestElementInAnArray {
 
-	// 方法1
-	public int findKthLargest1(int[] nums, int k) {
-		PriorityQueue<Integer> q = new PriorityQueue<Integer>(k);
-		for (int i : nums) {
-			q.offer(i);
+    // solution 1
+    public int findKthLargest1(int[] nums, int k) {
+        PriorityQueue<Integer> q = new PriorityQueue<Integer>(k);
+        for (int i : nums) {
+            q.offer(i);
 
-			if (q.size() > k) {
-				q.poll();
-			}
-		}
+            if (q.size() > k) {
+                q.poll();
+            }
+        }
 
-		return q.peek();
-	}
+        return q.peek();
+    }
 
-	// 方法2 利用partition的特性
-	public int findKthLargest2(int[] nums, int k) {
+    // solution 2 : quick select
+    public int findKthLargest2(int[] nums, int k) {
+        return helper2(nums, 0, nums.length - 1, nums.length - k + 1);
+    }
 
-		k = nums.length - k;
-		int lo = 0;
-		int hi = nums.length - 1;
-		while (lo < hi) {
-			final int j = partition(nums, lo, hi);
-			if (j < k) {
-				lo = j + 1;
-			} else if (j > k) {
-				hi = j - 1;
-			} else {
-				break;
-			}
-		}
-		return nums[k];
-	}
+    public int helper2(int[] nums, int start, int end, int k) { // k -> the Kth
+        int pivot = nums[start];
+        int i = start + 1;
+        int j = start + 1;
 
-	private int partition(int[] nums, int lo, int hi) {
+        while (i <= end) {
+            if (nums[i] <= pivot) {
+                swap(nums, i, j);
+                j++;
+            }
+            i++;
+        }
 
-		swap(nums, lo, (int) (Math.random() * (hi - lo + 1)) + lo);
+        j--;
 
-		int v = nums[lo];
+        swap(nums, start, j);
 
-		int j = lo; // arr[l+1...j] < v ; arr[j+1...i) > v
-		for (int i = lo + 1; i <= hi; i++)
-			if (nums[i] < v) {
-				j++;
-				swap(nums, j, i);
-			}
+        if (j - start + 1 == k) {
+            return nums[j];
+        } else if (j - start + 1 < k) {
+            return helper2(nums, j + 1, end, k - (j - start + 1));
+        } else {
+            return helper2(nums, start, j - 1, k);
+        }
+    }
 
-		swap(nums, lo, j);
+    // solution 3 : quick select
+    public int findKthLargest3(int[] nums, int k) {
+        return helper3(nums, 0, nums.length - 1, nums.length - k);
+    }
 
-		return j;
-	}
+    public int helper3(int[] nums, int start, int end, int k) { // k -> index
+        int pivot = nums[start];
+        int i = start + 1;
+        int j = start + 1;
 
-	private void swap(int[] nums, int i, int j) {
-		int temp = nums[i];
-		nums[i] = nums[j];
-		nums[j] = temp;
-	}
+        while (i <= end) {
+            if (nums[i] <= pivot) {
+                swap(nums, i, j);
+                j++;
+            }
+            i++;
+        }
+
+        j--;
+
+        swap(nums, start, j);
+
+        if (j == k) {
+            return nums[j];
+        } else if (j < k) {
+            return helper3(nums, j + 1, end, k);
+        } else {
+            return helper3(nums, start, j - 1, k);
+        }
+    }
+
+    public void swap(int[] nums, int x, int y) {
+        int tmp = nums[x];
+        nums[x] = nums[y];
+        nums[y] = tmp;
+    }
 
 }

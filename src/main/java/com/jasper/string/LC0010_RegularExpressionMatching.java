@@ -8,10 +8,13 @@ public class LC0010_RegularExpressionMatching {
 	
 	public static boolean isMatch(String s, String p) {
 		boolean[] match = new boolean[s.length() + 1];
+
 		for (int i = 0; i < match.length; i++) {
 			match[i] = false;
 		}
+
 		match[s.length()] = true;
+
 		for (int i = p.length() - 1; i >= 0; i--) {
 			if (p.charAt(i) == '*') {
 				for (int j = s.length() - 1; j >= 0; j--) {
@@ -25,6 +28,7 @@ public class LC0010_RegularExpressionMatching {
 				match[s.length()] = false;
 			}
 		}
+
 		return match[0];
 	}
 

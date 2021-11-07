@@ -1,57 +1,41 @@
 package com.jasper.array;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import com.jasper.common.Interval;
 
-class IntervalComparator implements Comparator<Interval> {
-	@Override
-	public int compare(Interval a, Interval b) {
-		return a.start - b.start;
-	}
-}
 
 public class LC0056_MergeIntervals {
 
-	public static List<Interval> merge(List<Interval> intervals) {
+    public int[][] merge(int[][] intervals) {
 
-		List<Interval> result = new ArrayList<Interval>();
-		IntervalComparator intervalComparator = new IntervalComparator();
+        List<int[]> result = new ArrayList<>();
+        Arrays.sort(intervals, (i1, i2) -> {
+            if (i1[0] != i2[0]) {
+                return i1[0] - i2[0];
+            }
+            return i1[1] - i2[1];
+        });
 
-		Collections.sort(intervals, intervalComparator); // important!!!!
+        int[] insertInterval = intervals[0];
 
-		if (intervals == null || intervals.size() == 0)
-			return result;
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] > insertInterval[1]) {
+                result.add(new int[]{insertInterval[0], insertInterval[1]});
+                insertInterval = intervals[i];
+            } else {
+                insertInterval[0] = Math.min(insertInterval[0], intervals[i][0]);
+                insertInterval[1] = Math.max(insertInterval[1], intervals[i][1]);
+            }
+        }
 
-		Interval temp = intervals.get(0);
+        result.add(insertInterval);
 
-		for (int i = 1; i < intervals.size(); i++) {
-			Interval cur = intervals.get(i);
-			if (cur.start > temp.end) {
-				result.add(temp);
-				temp = cur;
-			} else {
-				temp.end = Math.max(temp.end, cur.end);
-			}
+        int[][] res = new int[result.size()][2];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = result.get(i);
+        }
 
-		}
-
-		result.add(temp);
-
-		return result;
-	}
-
-	public static void main(String[] args) {
-
-		List<Interval> inputArray = new ArrayList<Interval>();
-		inputArray.add(new Interval(1, 3));
-		inputArray.add(new Interval(2, 6));
-		inputArray.add(new Interval(15, 18));
-		inputArray.add(new Interval(8, 10));
-
-		List<Interval> outputArray = merge(inputArray);
-	}
+        return res;
+    }
 }

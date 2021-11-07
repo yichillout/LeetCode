@@ -2,36 +2,44 @@ package com.jasper.string;
 
 public class LC0161_OneEditDistance {
 
-	public boolean isOneEditDistance(String s, String t) {
+    // example : s = "";  t = "" -> false
 
-		int n = s.length();
-		int m = t.length();
+    public boolean isOneEditDistance(String s, String t) {
 
-		if (Math.abs(m - n) > 1) {
-			return false;
-		}
+        int m = s.length();
+        int n = t.length();
 
-		String longStr;
-		String shortStr;
+        if (Math.abs(m - n) > 1) {
+            return false;
+        }
 
-		if (n < m) {
-			longStr = t;
-			shortStr = s;
-		} else {
-			longStr = s;
-			shortStr = t;
-		}
+        if (m == n) {
+            for (int i = 0; i < n; i++) {
+                if (s.charAt(i) != t.charAt(i)) {
+                    return s.substring(i + 1).equals(t.substring(i + 1));
+                }
+            }
+            return false;
+        } else if (m > n) {
+            return isRemove(s, t);
+        } else {
+            return isRemove(t, s);
+        }
+    }
 
-		for (int i = 0; i < shortStr.length(); i++) {
-			if (shortStr.charAt(i) != longStr.charAt(i)) {
-				if (longStr.length() == shortStr.length()) {
-					return longStr.substring(i + 1).equals(shortStr.substring(i + 1)); // just need to edit at index i
-				} else {
-					return longStr.substring(i + 1).equals(shortStr.substring(i)); // remove at index i of long string
-				}
-			}
-		}
+    public boolean isRemove(String longStr, String shortStr) {
+        int i = 0;
+        int j = 0;
 
-		return m != n; // long string just need to remove the last character
-	}
+        while (i < longStr.length() && j < shortStr.length()) {
+            if (longStr.charAt(i) != shortStr.charAt(j)) {
+                return longStr.substring(i + 1).equals(shortStr.substring(j));
+            }
+            i++;
+            j++;
+        }
+
+        // that means the longStr need to remove the last character
+        return true;
+    }
 }

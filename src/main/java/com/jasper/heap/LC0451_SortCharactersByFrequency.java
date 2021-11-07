@@ -4,7 +4,12 @@ import java.util.*;
 
 public class LC0451_SortCharactersByFrequency {
 
-    // solution 1 : Bucket sort
+    /**
+     * solution 1 : Bucket sort
+     *
+     * tree -> [0 -> [], 1 -> [t, r], 2 -> [e], 3 - >[], 4 -> []]
+     *
+     */
     public String frequencySort(String s) {
         Map<Character, Integer> frequencyForNum = new HashMap<>();
 
