@@ -1,6 +1,7 @@
 package com.jasper.greedy;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class LC1029_TwoCityScheduling {
 
@@ -28,5 +29,4 @@ public class LC1029_TwoCityScheduling {
 
 		return sum;
 	}
-
 }
