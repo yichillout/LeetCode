@@ -4,54 +4,53 @@ import java.util.*;
 
 class WordDistance {
 
-	Map<String, List<Integer>> hashMap;
+    Map<String, List<Integer>> positionMap;
 
-	public WordDistance(String[] words) {
+    public WordDistance(String[] wordsDict) {
 
-		hashMap = new HashMap<String, List<Integer>>();
+        positionMap = new HashMap<>();
 
-		for (int i = 0; i < words.length; i++) {
-			if (hashMap.containsKey(words[i])) {
-				hashMap.get(words[i]).add(i);
-			} else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(i);
-				hashMap.put(words[i], list);
-			}
-		}
+        for (int i = 0; i < wordsDict.length; i++) {
+            if (!positionMap.containsKey(wordsDict[i])) {
+                positionMap.put(wordsDict[i], new ArrayList<>());
+            }
+            positionMap.get(wordsDict[i]).add(i);
+        }
+    }
 
-	}
+    public int shortest(String word1, String word2) {
 
-	public int shortest(String word1, String word2) {
+        int i = 0;
+        int j = 0;
 
-		List<Integer> list1 = hashMap.get(word1);
-		List<Integer> list2 = hashMap.get(word2);
-		int result = Integer.MAX_VALUE;
+        int min = Integer.MAX_VALUE;
 
-		for (int i = 0; i < list1.size(); i++) {
-			for (int j = 0; j < list2.size(); j++) {
-				if (list1.get(i) < list2.get(j)) {
-					if (result > (list2.get(j) - list1.get(i))) {
-						result = list2.get(j) - list1.get(i);
-					}
-				} else {
-					if (result > (list1.get(i) - list2.get(j))) {
-						result = list1.get(i) - list2.get(j);
-					}
-				}
-			}
-		}
+        List<Integer> indexes1 = positionMap.get(word1);
+        List<Integer> indexes2 = positionMap.get(word2);
 
-		return result;
-	}
+        while (i < indexes1.size() && j < indexes2.size()) {
+            int index1 = indexes1.get(i);
+            int index2 = indexes2.get(j);
+
+            if (index1 < index2) {
+                min = Math.min(min, index2 - index1);
+                i++;
+            } else {
+                min = Math.min(min, index1 - index2);
+                j++;
+            }
+        }
+
+        return min;
+    }
 }
 
 public class LC0244_ShortestWordDistanceII {
 
-	public static void main(String[] args) {
-		String[] words = { "practice", "makes", "perfect", "coding", "makes" };
-		WordDistance wordDistance = new WordDistance(words);
-		System.out.println(wordDistance.shortest("coding", "practice"));
-		System.out.println(wordDistance.shortest("makes", "coding"));
-	}
+    public static void main(String[] args) {
+        String[] words = {"practice", "makes", "perfect", "coding", "makes"};
+        WordDistance wordDistance = new WordDistance(words);
+        System.out.println(wordDistance.shortest("coding", "practice"));
+        System.out.println(wordDistance.shortest("makes", "coding"));
+    }
 }
