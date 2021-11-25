@@ -2,44 +2,35 @@ package com.jasper.binarysearch;
 
 public class LC0033_SearchInRotatedSortedArray {
 
-    // solution 1
-    public static int search1(int[] nums, int target) {
-        if (nums == null || nums.length == 0) {
-            return -1;
-        }
+    public static int search(int[] nums, int target) {
+        int l = 0;
+        int r = nums.length - 1;
 
-        int start = 0;
-        int end = nums.length - 1;
-        int mid;
-
-        while (start + 1 < end) {
-            mid = start + (end - start) / 2;
-            if (nums[mid] == target) {
-                return mid;
-            }
-            if (nums[start] < nums[mid]) { // situation 1, red line
-                // here is ascending [start, mid]
-                if (nums[start] <= target && target <= nums[mid]) {
-                    end = mid;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (nums[l] < nums[mid]) {
+                if (nums[l] <= target && target <= nums[mid]) {
+                    r = mid;
                 } else {
-                    start = mid;
+                    l = mid;
                 }
-            } else { // situation 2, green line
-                // here is ascending [mid, start]
-                if (nums[mid] <= target && target <= nums[end]) {
-                    start = mid;
+            } else {
+                if (nums[mid] <= target && target <= nums[r]) {
+                    l = mid;
                 } else {
-                    end = mid;
+                    r = mid;
                 }
             }
         }
 
-        if (nums[start] == target) {
-            return start;
+        if (nums[l] == target) {
+            return l;
         }
-        if (nums[end] == target) {
-            return end;
+
+        if (nums[r] == target) {
+            return r;
         }
+
         return -1;
     }
 
@@ -47,7 +38,7 @@ public class LC0033_SearchInRotatedSortedArray {
         // int[] nums = { 3, 1 };
         // int[] nums = { 6, 7, 0, 1, 2, 4, 5 };
         int[] nums = {3, 5, 1};
-        System.out.println(search1(nums, 5));
+        System.out.println(search(nums, 5));
 
     }
 }

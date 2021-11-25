@@ -24,7 +24,6 @@ public class LC0056_MergeIntervals {
                 result.add(new int[]{insertInterval[0], insertInterval[1]});
                 insertInterval = intervals[i];
             } else {
-                insertInterval[0] = Math.min(insertInterval[0], intervals[i][0]);
                 insertInterval[1] = Math.max(insertInterval[1], intervals[i][1]);
             }
         }

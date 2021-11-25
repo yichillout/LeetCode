@@ -6,29 +6,56 @@ import com.annotation.Template;
 public class LC0261_GraphValidTree {
 
 	// Union Find
-	public boolean validTree(int n, int[][] edges) {
+	class UnionFind {
 
-		int[] roots = new int[n];
-		for (int i = 0; i < n; i++) {
-			roots[i] = i;
-		}
+		int[] data;
 
-		for (int i = 0; i < edges.length; i++) {
-			int r1 = find(roots, edges[i][0]);
-			int r2 = find(roots, edges[i][1]);
-			if (r1 == r2) {
-				return false;
+		public UnionFind(int n) {
+			data = new int[n];
+			for(int i = 0; i < n; i++) {
+				data[i] = i;
 			}
-			roots[r1] = r2;
 		}
 
-		return edges.length == n - 1;
+
+		public boolean isConnected(int x, int y) {
+			int xp = find(x);
+			int yp = find(y);
+			return xp == yp;
+		}
+
+		public void union(int x, int y) {
+			if(!isConnected(x, y)) {
+				int xp = find(x);
+				int yp = find(y);
+				data[xp] = yp;
+			}
+		}
+
+		public int find(int x) {
+			int p = data[x];
+
+			if(p != x) {
+				data[x] = find(p);
+			}
+
+			return data[x] ;
+		}
+
 	}
 
-	private int find(int[] roots, int x) {
-		if (roots[x] == x) {
-			return x;
+	public boolean validTree(int n, int[][] edges) {
+
+		UnionFind uf = new UnionFind(n);
+
+		for(int[] edge : edges) {
+			if(!uf.isConnected(edge[0], edge[1])) {
+				uf.union(edge[0], edge[1]);
+			} else {
+				return false;
+			}
 		}
-		return roots[x] = find(roots, roots[x]);
+
+		return n == edges.length + 1;
 	}
 }

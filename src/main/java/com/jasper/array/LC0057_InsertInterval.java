@@ -31,9 +31,8 @@ public class LC0057_InsertInterval {
             } else if (intervals[i][1] >= tmp[0]) { // intervals[i][0] <= tmp[1] && intervals[i][1] >= tmp[0]
                 // tmp             [x   y]
                 // interval   [a    b]
-                int start = Math.min(intervals[i][0], tmp[0]);
-                int end = Math.max(intervals[i][1], tmp[1]);
-                tmp = new int[]{start, end};
+                tmp[0] = Math.min(intervals[i][0], tmp[0]);
+                tmp[1] = Math.max(intervals[i][1], tmp[1]);
             } else {
                 // tmp                  [x   y]
                 // interval   [a    b]

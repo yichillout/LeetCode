@@ -15,9 +15,18 @@ public class LC0090_SubsetsII {
     }
 
     public static void helper(int start, List<Integer> path, List<List<Integer>> result, int[] nums) {
+        System.out.println(path);
+
         result.add(new ArrayList<>(path));
 
         for (int i = start; i < nums.length; i++) {
+            /**
+             * [1a,2a,2b]
+             * 1a
+             * 1a -> 2a
+             * 1a -> 2a -> 2b
+             * 1a -> 2b (nums[i] == nums[i - 1])
+             */
             if (i == start || nums[i] != nums[i - 1]) {
                 path.add(nums[i]);
                 helper(i + 1, path, result, nums);
