@@ -10,54 +10,46 @@ import java.util.Set;
 public class LC1110_DeleteNodesAndReturnForest {
 
     public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
-        List<TreeNode> result = new ArrayList<>();
-        Set<Integer> deleteSet = new HashSet<>();
-        for (int d : to_delete) {
-            deleteSet.add(d);
-        }
-        dfs(root, null, false, result, deleteSet);
-        if (!deleteSet.contains(root.val)) {
-            result.add(root);
-        } else {
-            if (root.left != null) {
-                result.add(root.left);
-                root.left = null;
-            }
 
-            if (root.right != null) {
-                result.add(root.right);
-                root.right = null;
-            }
+        List<TreeNode> forest = new ArrayList<>();
+
+        if (root == null) {
+            return forest;
         }
-        return result;
+
+        Set<Integer> set = new HashSet<>();
+
+        for (int i : to_delete) {
+            set.add(i);
+        }
+
+        deleteNodes(root, set, forest);
+
+        if (!set.contains(root.val)) {
+            forest.add(root);
+        }
+
+        return forest;
     }
 
-    public void dfs(TreeNode node, TreeNode parent, boolean isLeft, List<TreeNode> result, Set<Integer> deleteSet) {
+    private TreeNode deleteNodes(TreeNode node, Set<Integer> set, List<TreeNode> forest) {
         if (node == null) {
-            return;
+            return null;
         }
 
-        dfs(node.left, node, true, result, deleteSet);
-        dfs(node.right, node, false, result, deleteSet);
+        node.left = deleteNodes(node.left, set, forest);
+        node.right = deleteNodes(node.right, set, forest);
 
-        if (deleteSet.contains(node.val)) {
-            if (parent != null) {
-                if (isLeft) {
-                    parent.left = null;
-                } else {
-                    parent.right = null;
-                }
-            }
-
+        if (set.contains(node.val)) {
             if (node.left != null) {
-                result.add(node.left);
-                node.left = null;
+                forest.add(node.left);
             }
-
             if (node.right != null) {
-                result.add(node.right);
-                node.right = null;
+                forest.add(node.right);
             }
+            return null;
         }
+
+        return node;
     }
 }

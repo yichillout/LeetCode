@@ -26,7 +26,7 @@ public class LC0039_CombinationSum {
             return;
 
         if (target == 0) {
-            res.add(new ArrayList<Integer>(path));
+            res.add(new ArrayList<>(path));
             return;
         }
 

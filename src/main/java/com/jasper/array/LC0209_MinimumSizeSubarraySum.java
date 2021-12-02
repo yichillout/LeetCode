@@ -2,34 +2,18 @@ package com.jasper.array;
 
 public class LC0209_MinimumSizeSubarraySum {
 
-	public int minSubArrayLen(int s, int[] nums) {
-
-        if(s <= 0 || nums == null)
-            throw new IllegalArgumentException("Illigal Arguments");
-
-        int l = 0 , r = -1; // nums[l...r]为我们的滑动窗口
+    public int minSubArrayLen(int target, int[] nums) {
+        int min = Integer.MAX_VALUE;
         int sum = 0;
-        int res = nums.length + 1;
-
-        while(l < nums.length){   // 窗口的左边界在数组范围内,则循环继续
-
-            if(r + 1 < nums.length && sum < s) {
-                r++;
-                sum += nums[r];
-            } else // r已经到头 或者 sum >= s
-                sum -= nums[l++];
-
-            if(sum >= s)
-                res = Math.min(res, r - l + 1);
+        int j = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            while (sum >= target) {
+                min = Math.min(min, i - j + 1);
+                sum -= nums[j];
+                j++;
+            }
         }
-
-        if(res == nums.length + 1)
-            return 0;
-        return res;
+        return min == Integer.MAX_VALUE ? 0 : min;
     }
-
-	public static void main(String[] args) {
-
-	}
-
 }

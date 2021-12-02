@@ -22,11 +22,8 @@ public class LC0207_CourseSchedule {
 
 	public static boolean canFinish(int numCourses, int[][] prerequisites) {
 
-		Map<Integer, List<Integer>> courses = new HashMap<>();
-		Map<Integer, Integer> indegree = new HashMap<>();
-
-		courses = build(numCourses, prerequisites);
-		indegree = getIndegree(numCourses, prerequisites);
+		Map<Integer, List<Integer>> courses = build(numCourses, prerequisites);
+		Map<Integer, Integer> indegree = getIndegree(numCourses, prerequisites);
 
 		Queue<Integer> queue = new LinkedList<>();
 		for (Integer key : indegree.keySet()) {
