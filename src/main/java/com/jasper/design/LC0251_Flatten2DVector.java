@@ -4,32 +4,30 @@ import java.util.*;
 
 class Vector2D {
 
-	private List<List<Integer>> list;
-	private int listIndex;
-	private int elemIndex;
+    int[][] data;
+    int row;
+    int col;
 
-	public Vector2D(List<List<Integer>> vec2d) {
-		list = vec2d;
-		listIndex = 0;
-		elemIndex = 0;
-	}
+    public Vector2D(int[][] vec) {
+        data = vec;
+        row = 0;
+        col = 0;
+    }
 
-	public int next() {
-		return list.get(listIndex).get(elemIndex++);
-	}
+    public int next() {
+        if (hasNext()) {
+            return data[row][col++];
+        }
+        return -1;
+    }
 
-	public boolean hasNext() {
-		while (listIndex < list.size()) {
-			if (elemIndex < list.get(listIndex).size()) {
-				return true;
-			} else {
-				listIndex++;
-				elemIndex = 0;
-			}
-		}
-
-		return false;
-	}
+    public boolean hasNext() {
+        while (row < data.length && col == data[row].length) {
+            row++;
+            col = 0;
+        }
+        return row < data.length;
+    }
 }
 
 public class LC0251_Flatten2DVector {
