@@ -3,7 +3,8 @@ package com.jasper.depthfirstsearch;
 public class LC0698_PartitionToKEqualSumSubsets {
 
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        int sum = 0, maxNum = 0;
+        int sum = 0;
+        int maxNum = 0;
 
         for (int num : nums) {
             sum += num;

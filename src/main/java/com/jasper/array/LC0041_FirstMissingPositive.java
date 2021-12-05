@@ -8,25 +8,92 @@ package com.jasper.array;
  *
  * */
 
+import java.util.Arrays;
+
 public class LC0041_FirstMissingPositive {
-	public static int firstMissingPositive(int[] A) {
-		int i = 0;
-		while (i < A.length) {
-			if (A[i] != (i + 1) && A[i] >= 1 && A[i] <= A.length && A[A[i] - 1] != A[i]) {
-				int temp = A[i];
-				A[i] = A[temp - 1];
-				A[temp - 1] = temp;  // example: put 3 to A[2]; put 4 to A[3]
-			} else
-				i++;
-		}
-		for (i = 0; i < A.length; ++i)
-			if (A[i] != (i + 1))
-				return i + 1;
-		return A.length + 1;
-	}
-	
-	public static void main(String[] args){
-		int[] nums = {3,4,-1,1};
-		System.out.println(firstMissingPositive(nums));
-	}
+
+    public static int firstMissingPositive1(int[] nums) {
+        int i = 0;
+
+        while (i < nums.length) {
+            if (nums[i] != (i + 1) && nums[i] >= 1 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]) {
+                int temp = nums[i];
+                nums[i] = nums[temp - 1];
+                nums[temp - 1] = temp;  // example: put 3 to A[2]; put 4 to A[3]
+            } else
+                i++;
+        }
+
+        for (i = 0; i < nums.length; ++i) {
+            if (nums[i] != (i + 1)) {
+                return i + 1;
+            }
+        }
+
+        return nums.length + 1;
+    }
+
+    /**
+     * solution 2 : use boolean array     time:O(n)    space:O(n)
+     *           0   1  2  3  4   5
+     *  nums:   [1, -1, 2, 3, 5, -3]
+     *  flags:  [t,  t, t, f, t,  f]
+     *
+     *  return the first index of false
+     */
+
+    public int firstMissingPositive2(int[] nums) {
+        boolean[] flags = new boolean[nums.length];
+
+        for (int num : nums) {
+            if (num - 1 >= 0 && num - 1 < flags.length) {
+                flags[num - 1] = true;
+            }
+        }
+
+        for (int i = 0; i < flags.length; i++) {
+            if (!flags[i]) {
+                return i + 1;
+            }
+        }
+
+        return nums.length + 1;
+    }
+
+    // solution 3 : sorting
+    public int firstMissingPositive3(int[] nums) {
+        Arrays.sort(nums);
+
+        int index = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) {
+            return 1;
+        }
+
+        int result = 1;
+        while (index < nums.length) {
+            if (nums[index] == result) {
+                index++;
+                while (index < nums.length && nums[index - 1] == nums[index]) {
+                    index++;
+                }
+                result++;
+            } else {
+                return result;
+            }
+        }
+
+        return nums[nums.length - 1] + 1;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {0, 2, 2, 1, 1};
+        System.out.println(firstMissingPositive1(nums));
+    }
 }

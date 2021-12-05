@@ -5,6 +5,7 @@ import java.util.*;
 public class LC0049_GroupAnagrams {
 
     public List<List<String>> groupAnagrams(String[] strs) {
+
         if (strs == null || strs.length == 0) {
             return new ArrayList<>();
         }
