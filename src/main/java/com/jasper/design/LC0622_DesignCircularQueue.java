@@ -23,9 +23,10 @@ class MyCircularQueue {
         tail = (tail + 1) % data.length;
         data[tail] = value;
 
-        if (head == -1) {
-            head++;
-        }
+//        if head is set to -1, uncomment the following code
+//        if (head == -1) {
+//            head++;
+//        }
 
         size++;
         return true;

@@ -10,9 +10,9 @@ public class LC0297_SerializeandDeserializeBinaryTree {
     /**
      * solution 1 : DFS
      * <p>
-     * 1
-     * 2   3
-     * 4   5
+     *     1
+     *   2   3
+     *     4   5
      * <p>
      * 1,2,#,#,3,4,#,#,5,#,#
      */
