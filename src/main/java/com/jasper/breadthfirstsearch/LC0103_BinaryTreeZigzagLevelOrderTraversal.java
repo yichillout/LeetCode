@@ -21,7 +21,7 @@ public class LC0103_BinaryTreeZigzagLevelOrderTraversal {
 			return;
 		}
 		if (result.size() < level + 1) {// need one more line
-			result.add(new LinkedList<Integer>());
+			result.add(new LinkedList<>());
 		}
 		if (level % 2 != 0) {
 			((LinkedList<Integer>) result.get(level)).addFirst(node.val);
