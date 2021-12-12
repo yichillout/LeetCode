@@ -1,4 +1,4 @@
-package com.jasper.preSum;
+package com.jasper.prefixSum;
 
 import java.util.Random;
 

@@ -4,26 +4,26 @@ import java.util.*;
 
 class TwoSum {
 
-    Map<Integer, Integer> map;
+    Map<Integer, Integer> countMap;
 
     public TwoSum() {
-        map = new HashMap<>();
+        countMap = new HashMap<>();
     }
 
     public void add(int number) {
-        if (map.containsKey(number)) {
-            map.put(number, map.get(number) + 1);
+        if (countMap.containsKey(number)) {
+            countMap.put(number, countMap.get(number) + 1);
         } else {
-            map.put(number, 1);
+            countMap.put(number, 1);
         }
     }
 
     public boolean find(int value) {
-        for (int key : map.keySet()) {
+        for (int key : countMap.keySet()) {
             int another = value - key;
-            if (another == key && map.get(key) > 1) {
+            if (another == key && countMap.get(key) > 1) {
                 return true;
-            } else if (another != key && map.containsKey(another)) {
+            } else if (another != key && countMap.containsKey(another)) {
                 return true;
             }
         }

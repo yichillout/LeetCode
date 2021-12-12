@@ -1,4 +1,4 @@
-package com.jasper.preSum;
+package com.jasper.prefixSum;
 
 public class LC1031_MaximumSumOfTwoNonOverlappingSubarrays {
 

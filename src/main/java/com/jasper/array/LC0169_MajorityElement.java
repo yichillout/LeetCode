@@ -32,8 +32,10 @@ public class LC0169_MajorityElement {
     }
 
     // Solution 2 : voting algorithm
+    // You may assume that the majority element always exists in the array.
     public int majorityElement2(int[] nums) {
-        int result = 0, count = 0;
+        int result = 0;
+        int count = 0;
 
         for (int i = 0; i < nums.length; i++) {
             if (count == 0) {

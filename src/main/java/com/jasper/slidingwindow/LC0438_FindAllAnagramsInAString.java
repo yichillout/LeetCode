@@ -16,7 +16,8 @@ public class LC0438_FindAllAnagramsInAString {
             List<Integer> result = new ArrayList<>();
             int diff = p.length();
 
-            for (int i = 0, j = 0; i < s.length(); i++) {
+            int j = 0;
+            for (int i = 0; i < s.length(); i++) {
                 if (freq[s.charAt(i)] > 0) {
                     freq[s.charAt(i)]--;
                     diff--;

@@ -3,7 +3,6 @@ package com.jasper.dynamicprogramming;
 public class LC0322_CoinChange {
 
     public int coinChange(int[] coins, int amount) {
-
         int[] dp = new int[amount + 1];
         dp[0] = 0;
 
@@ -11,7 +10,6 @@ public class LC0322_CoinChange {
             dp[i] = Integer.MAX_VALUE;
 
             for (int j = 0; j < coins.length; j++) {
-
                 if (i == coins[j]) {
                     dp[i] = 1;
                 }
