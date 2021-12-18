@@ -62,14 +62,14 @@ public class LC1650_LowestCommonAncestorOfABinaryTreeIII {
     }
 
     // solution 2
-    public Node lowestCommonAncestor2(Node p, Node q) {
-
+    public Node lowestCommonAncestor(Node p, Node q) {
         Node cur1 = p;
         Node cur2 = q;
 
+        // p and q exist in the tree.
         while (cur1 != cur2) {
-            cur1 = cur1.parent == null ? q : cur1.parent;
-            cur2 = cur2.parent == null ? p : cur2.parent;
+            cur1 = cur1 == null ? q : cur1.parent;
+            cur2 = cur2 == null ? p : cur2.parent;
         }
 
         return cur1;

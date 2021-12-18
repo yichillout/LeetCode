@@ -19,8 +19,9 @@ public class LC0256_PaintHouse {
             for (int j = 0; j < 3; j++) {
                 dp[i][j] = Integer.MAX_VALUE;
                 for (int k = 0; k < 3; k++) {
-                    if (k == j)
+                    if (k == j) {
                         continue;
+                    }
 
                     dp[i][j] = Math.min(dp[i][j], dp[i - 1][k] + costs[i - 1][k]);
                 }

@@ -30,11 +30,7 @@ public class LC0953_VerifyingAnAlienDictionary {
             char c1 = str1.charAt(index1);
             char c2 = str2.charAt(index2);
             if (c1 != c2) {
-                if (orderMap.get(c1) > orderMap.get(c2)) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return orderMap.get(c1) < orderMap.get(c2);
             }
             index1++;
             index2++;

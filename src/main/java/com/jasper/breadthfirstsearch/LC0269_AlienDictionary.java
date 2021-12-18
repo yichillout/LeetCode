@@ -26,6 +26,13 @@ public class LC0269_AlienDictionary {
             for (int j = 0; j < length; j++) {
                 char c1 = cur.charAt(j);
                 char c2 = next.charAt(j);
+
+                //check for cases like, ["wrtkj","wrt"]; it's invalid, because this input is not in sorted lexicographical order
+                if (cur.length() > next.length() && cur.startsWith(next)){
+                    return "";
+                }
+
+
                 if (c1 != c2) {
                     Set<Character> set = new HashSet<>();
 
