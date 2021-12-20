@@ -8,12 +8,34 @@ public class LC0047_PermutationsII {
 
 
     public List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> list = new ArrayList<>();
-        List<Integer> tmp = new ArrayList<>();
-        boolean[] used = new boolean[nums.length];
+        List<List<Integer>> result = new ArrayList<>();
         Arrays.sort(nums);
-        dfs(list, used, nums, tmp);
-        return list;
+        helper(result, new ArrayList<>(), nums, new boolean[nums.length]);
+        return result;
+    }
+
+    public void helper(List<List<Integer>> result, List<Integer> path, int[] nums, boolean[] visited) {
+        if(path.size() == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+
+        for(int i = 0; i < nums.length; i++) {
+            if(visited[i]) {
+                continue;
+            }
+
+            if (i > 0 && nums[i - 1] == nums[i] && !visited[i - 1]) {
+                continue;
+            }
+
+
+            visited[i] = true;
+            path.add(nums[i]);
+            helper(result, path, nums, visited);
+            visited[i] = false;
+            path.remove(path.size() - 1);
+        }
     }
 
     public void dfs(List<List<Integer>> list, boolean[] used, int[] nums, List<Integer> tmp) {

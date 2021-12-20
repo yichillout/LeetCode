@@ -12,39 +12,6 @@ abstract class Node {
     // define your fields here
 };
 
-class TreeNode extends Node {
-    String val;
-    TreeNode left;
-    TreeNode right;
-
-    public TreeNode(String val) {
-        this.val = val;
-    }
-
-    public int evaluate() {
-        return TreeNode.dfs(this);
-    }
-
-    public static int dfs(TreeNode node) {
-        if (node.left == null && node.right == null) {
-            return Integer.valueOf(node.val);
-        }
-
-        int l = dfs(node.left);
-        int r = dfs(node.right);
-
-        if (node.val.equals("+")) {
-            return l + r;
-        } else if (node.val.equals("-")) {
-            return l - r;
-        } else if (node.val.equals("*")) {
-            return l * r;
-        } else {
-            return l / r;
-        }
-    }
-}
-
 
 /**
  * This is the TreeBuilder class.
@@ -53,6 +20,40 @@ class TreeNode extends Node {
  */
 
 class TreeBuilder {
+
+    static class TreeNode extends Node {
+        String val;
+        TreeNode left;
+        TreeNode right;
+
+        public TreeNode(String val) {
+            this.val = val;
+        }
+
+        public int evaluate() {
+            return TreeNode.dfs(this);
+        }
+
+        public static int dfs(TreeNode node) {
+            if (node.left == null && node.right == null) {
+                return Integer.valueOf(node.val);
+            }
+
+            int l = dfs(node.left);
+            int r = dfs(node.right);
+
+            if (node.val.equals("+")) {
+                return l + r;
+            } else if (node.val.equals("-")) {
+                return l - r;
+            } else if (node.val.equals("*")) {
+                return l * r;
+            } else {
+                return l / r;
+            }
+        }
+    }
+
     Node buildTree(String[] postfix) {
         Stack<TreeNode> stack = new Stack<>();
         String operators = "+-*/";

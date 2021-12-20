@@ -1,5 +1,7 @@
 package com.jasper.tree;
 
+import com.common.TreeNode;
+
 public class LC0156_BinaryTreeUpsideDown {
 
     public TreeNode upsideDownBinaryTree(TreeNode root) {

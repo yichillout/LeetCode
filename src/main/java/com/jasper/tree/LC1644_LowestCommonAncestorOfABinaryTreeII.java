@@ -1,5 +1,7 @@
 package com.jasper.tree;
 
+import com.common.TreeNode;
+
 public class LC1644_LowestCommonAncestorOfABinaryTreeII {
 
     boolean pFound = false;

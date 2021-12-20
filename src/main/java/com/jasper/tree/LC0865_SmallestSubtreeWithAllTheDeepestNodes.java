@@ -1,5 +1,7 @@
 package com.jasper.tree;
 
+import com.common.TreeNode;
+
 public class LC0865_SmallestSubtreeWithAllTheDeepestNodes {
 
     class RT {

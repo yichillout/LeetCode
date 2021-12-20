@@ -9,29 +9,23 @@ public class LC0032_LongestValidParentheses {
         Stack<Integer> stack = new Stack<>();
         stack.push(-1);
 
+        int max = 0;
         char[] ss = s.toCharArray();
 
-        int res = 0;
         for (int i = 0; i < ss.length; i++) {
-            if (ss[i] == '(' || stack.size() == 1) {
+            if (ss[i] == '(') {
                 stack.push(i);
             } else {
-                char c = ss[stack.peek()];
-                int len = 0;
-                if (ss[i] == ')' && c == '(') {
-                    stack.pop();
-                    len = i - stack.peek();
-                } else {
+                stack.pop();
+                if (stack.isEmpty()) {
                     stack.push(i);
-                }
-
-                if (len > res) {
-                    res = len;
+                } else {
+                    max = Math.max(max, i - stack.peek());
                 }
             }
         }
 
-        return res;
+        return max;
     }
 
     // Solution 2 : DP
