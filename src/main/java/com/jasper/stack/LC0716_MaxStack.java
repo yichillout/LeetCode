@@ -13,16 +13,13 @@ class MaxStack {
     }
 
     public void push(int x) {
-        pushHelper(x);
-    }
-
-    public void pushHelper(int x) {
-        int tempMax = maxStack.isEmpty() ? Integer.MIN_VALUE : maxStack.peek();
-        if (x > tempMax) {
-            tempMax = x;
+        if (stack.isEmpty()) {
+            maxStack.push(x);
+        } else {
+            maxStack.push(x > maxStack.peek() ? x : maxStack.peek());
         }
+
         stack.push(x);
-        maxStack.push(tempMax);
     }
 
     public int pop() {
@@ -39,20 +36,20 @@ class MaxStack {
     }
 
     public int popMax() {
+        Stack<Integer> tmp = new Stack<>();
+
         int max = maxStack.peek();
-        Stack<Integer> temp = new Stack<>();
 
         while (stack.peek() != max) {
-            temp.push(stack.pop());
+            tmp.push(stack.pop());
             maxStack.pop();
         }
 
         stack.pop();
         maxStack.pop();
 
-        while (!temp.isEmpty()) {
-            int x = temp.pop();
-            pushHelper(x);
+        while (!tmp.isEmpty()) {
+            push(tmp.pop());
         }
 
         return max;
@@ -60,4 +57,18 @@ class MaxStack {
 }
 
 public class LC0716_MaxStack {
+
+    public static void main(String[] args) {
+        MaxStack stk = new MaxStack();
+        stk.push(5);   // [5] the top of the stack and the maximum number is 5.
+        stk.push(1);   // [5, 1] the top of the stack is 1, but the maximum is 5.
+        stk.push(5);   // [5, 1, 5] the top of the stack is 5, which is also the maximum, because it is the top most one.
+        stk.top();     // return 5, [5, 1, 5] the stack did not change.
+        stk.popMax();  // return 5, [5, 1] the stack is changed now, and the top is different from the max.
+        stk.top();     // return 1, [5, 1] the stack did not change.
+        stk.peekMax(); // return 5, [5, 1] the stack did not change.
+        stk.popMax();     // return 1, [5] the top of the stack and the max element is now 5.
+        stk.top();     // return 5, [5] the stack did not change.
+    }
+
 }

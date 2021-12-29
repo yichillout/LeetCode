@@ -10,20 +10,22 @@ public class LC0394_DecodeString {
         Stack<StringBuilder> strStack = new Stack<>();
         StringBuilder cur = new StringBuilder();
 
-        int count = 0;
+        int num = 0;
         for (char ch : s.toCharArray()) {
             if (Character.isDigit(ch)) {
-                count = count * 10 + ch - '0';
+                num = num * 10 + ch - '0';
             } else if (ch == '[') {
-                intStack.push(count);
+                intStack.push(num);
                 strStack.push(cur);
                 cur = new StringBuilder();
-                count = 0;
+                num = 0;
             } else if (ch == ']') {
                 StringBuilder tmp = cur;
                 cur = strStack.pop();
-                for (count = intStack.pop(); count > 0; count--) {
+                int count = intStack.pop();
+                while (count > 0) {
                     cur.append(tmp);
+                    count--;
                 }
             } else {
                 cur.append(ch);

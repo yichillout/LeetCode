@@ -13,15 +13,23 @@ public class LC0065_ValidNumber {
             if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
                 isDigit = true;
             } else if (s.charAt(i) == '.') {
-                if (eSeen || dotSeen) return false; // a dot cannot occur after 'e' in valid num
+                if (eSeen || dotSeen) {
+                    return false; // a dot cannot occur after 'e' in valid num
+                }
                 dotSeen = true;
             } else if (s.charAt(i) == 'e') {
-                if (eSeen || !isDigit) return false; // if 'e' is in start, that is not a valid num
+                if (eSeen || !isDigit) {
+                    return false; // if 'e' is in start, that is not a valid num
+                }
                 eSeen = true;
                 isDigit = false;
             } else if (s.charAt(i) == '+' || s.charAt(i) == '-') {
-                if (i != 0 && s.charAt(i - 1) != 'e') return false;
-            } else return false;
+                if (i != 0 && s.charAt(i - 1) != 'e') {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
 
         return isDigit;

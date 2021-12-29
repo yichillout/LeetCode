@@ -12,17 +12,18 @@ public class LC0987_VerticalOrderTraversalOfABinaryTree {
     // Solution 1 : DFS + PriorityQueue
     public List<List<Integer>> verticalTraversal(TreeNode root) {
         List<List<Integer>> res = new ArrayList();
-        if (root == null) return res;
 
-        PriorityQueue<Point> pq = new PriorityQueue(new Comparator<Point>() {
-            public int compare(Point p1, Point p2) {
-                if (p1.x != p2.x) {
-                    return p1.x - p2.x;
-                } else if (p1.y != p2.y) {
-                    return p2.y - p1.y;
-                } else {
-                    return p1.val - p2.val;
-                }
+        if (root == null) {
+            return res;
+        }
+
+        PriorityQueue<Point> pq = new PriorityQueue((Comparator<Point>) (p1, p2) -> {
+            if (p1.x != p2.x) {
+                return p1.x - p2.x;
+            } else if (p1.y != p2.y) {
+                return p2.y - p1.y;
+            } else {
+                return p1.val - p2.val;
             }
         });
 

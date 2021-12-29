@@ -26,6 +26,7 @@ public class LC0723_CandyCrush {
 					}
 				}
 			}
+
 			if (found) { // move positive values to the bottom, then set the rest to 0
 				for (int j = 0; j < M; j++) {
 					int storeInd = N - 1;

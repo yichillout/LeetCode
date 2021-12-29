@@ -7,36 +7,24 @@ import java.util.List;
 public class LC0040_CombinationSumII {
 
     public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        List<List<Integer>> res = new ArrayList<>();
-        List<Integer> path = new ArrayList<>();
-
-        if (candidates == null || candidates.length == 0) {
-            return res;
-        }
-
+        List<List<Integer>> result = new ArrayList<>();
         Arrays.sort(candidates);
-
-        dfs(0, target, res, path, candidates);
-
-        return res;
+        helper(result, new ArrayList<>(), candidates, 0, target);
+        return result;
     }
 
-    public static void dfs(int pos, int target, List<List<Integer>> res, List<Integer> path, int[] candidates) {
-        if (target < 0)
-            return;
-
+    public static void helper(List<List<Integer>> result, List<Integer> path, int[] candidates, int start, int target) {
         if (target == 0) {
-            res.add(new ArrayList<>(path));
+            result.add(new ArrayList<>(path));
             return;
         }
 
-        for (int i = pos; i < candidates.length; i++) {
-            if (i == pos || candidates[i] != candidates[i - 1]) {
+        for (int i = start; i < candidates.length; i++) {
+            if ((i == start || candidates[i] != candidates[i - 1]) && target >= candidates[i]) {
                 path.add(candidates[i]);
-                dfs(i + 1, target - candidates[i], res, path, candidates);
+                helper(result, path, candidates, i + 1, target - candidates[i]);
                 path.remove(path.size() - 1);
             }
-
         }
     }
 

@@ -1,13 +1,11 @@
-package com.jasper.math;
+package com.jasper.twopointers;
 
 public class LC0360_SortTransformedArray {
 
     public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
         int n = nums.length;
         int[] sorted = new int[n];
-        int i = 0;
-        int j = n - 1;
-
+        int i = 0, j = n - 1;
         int index = a >= 0 ? n - 1 : 0;
 
         while (i <= j) {
@@ -17,7 +15,6 @@ public class LC0360_SortTransformedArray {
                 sorted[index++] = quad(nums[i], a, b, c) >= quad(nums[j], a, b, c) ? quad(nums[j--], a, b, c) : quad(nums[i++], a, b, c);
             }
         }
-
         return sorted;
     }
 

@@ -10,6 +10,7 @@ public class LC0156_BinaryTreeUpsideDown {
         }
 
         TreeNode newRoot = upsideDownBinaryTree(root.left);
+
         root.left.left = root.right;    // node 2 left children
         root.left.right = root;         // node 2 right children
         root.left = null;
