@@ -5,36 +5,44 @@ import java.util.List;
 
 public class LC0438_FindAllAnagramsInAString {
 
-    // solution 1 : sliding window TODO
+    // solution 1 : sliding window
     public List<Integer> findAnagrams1(String s, String p) {
-            int[] freq = new int[256];
+        List<Integer> list = new ArrayList<>();
 
-            for (int i = 0; i < p.length(); i++) {
-                freq[p.charAt(i)]++;
+        if (s == null || s.length() == 0 || p == null || p.length() == 0)
+            return list;
+
+        int[] hash = new int[256];
+
+        for (char c : p.toCharArray()) {
+            hash[c]++;
+        }
+
+        int count = p.length();
+
+        int j = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (hash[s.charAt(i)] > 0) {
+                count--;
             }
 
-            List<Integer> result = new ArrayList<>();
-            int diff = p.length();
+            hash[s.charAt(i)]--;
 
-            int j = 0;
-            for (int i = 0; i < s.length(); i++) {
-                if (freq[s.charAt(i)] > 0) {
-                    freq[s.charAt(i)]--;
-                    diff--;
-                }
-
-                while (diff == 0) {
-                    if (i - j + 1 == p.length()) { // Here is the key!
-                        result.add(j);
-                    }
-
-
-                    if (++freq[s.charAt(j++)] > 0) {
-                        diff++;
-                    }
-                }
+            if (count == 0) {
+                list.add(j);
             }
-            return result;
+
+            if (i - j + 1 == p.length()) {
+                if (hash[s.charAt(j)] >= 0) {
+                    count++;
+                }
+
+                hash[s.charAt(j)]++;
+                j++;
+            }
+
+        }
+        return list;
     }
 
     // solution 2

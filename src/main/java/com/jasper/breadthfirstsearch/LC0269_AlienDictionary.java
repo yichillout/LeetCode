@@ -4,17 +4,13 @@ import java.util.*;
 
 public class LC0269_AlienDictionary {
 
-    public String alienOrder(String[] words) {
+    public static String alienOrder(String[] words) {
+
         Map<Character, Set<Character>> map = new HashMap<>();
         Map<Character, Integer> degree = new HashMap<>();
-        String result = "";
 
-        if (words == null || words.length == 0) {
-            return result;
-        }
-
-        for (String s : words) {
-            for (char c : s.toCharArray()) {
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
                 degree.put(c, 0);
             }
         }
@@ -22,23 +18,23 @@ public class LC0269_AlienDictionary {
         for (int i = 0; i < words.length - 1; i++) {
             String cur = words[i];
             String next = words[i + 1];
-            int length = Math.min(cur.length(), next.length());
-            for (int j = 0; j < length; j++) {
+
+            if (cur.length() > next.length() && cur.startsWith(next)) {
+                return "";
+            }
+
+            int len = Math.min(cur.length(), next.length());
+
+            for (int j = 0; j < len; j++) {
                 char c1 = cur.charAt(j);
                 char c2 = next.charAt(j);
 
-                //check for cases like, ["wrtkj","wrt"]; it's invalid, because this input is not in sorted lexicographical order
-                if (cur.length() > next.length() && cur.startsWith(next)){
-                    return "";
-                }
-
-
                 if (c1 != c2) {
-                    Set<Character> set = new HashSet<>();
-
-                    if (map.containsKey(c1)) {
-                        set = map.get(c1);
+                    if (!map.containsKey(c1)) {
+                        map.put(c1, new HashSet<>());
                     }
+
+                    Set<Character> set = map.get(c1);
 
                     if (!set.contains(c2)) {
                         set.add(c2);
@@ -46,34 +42,47 @@ public class LC0269_AlienDictionary {
                         degree.put(c2, degree.get(c2) + 1);
                     }
 
-                    break;
+                    break; // important
                 }
             }
         }
 
-        Queue<Character> q = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        Queue<Character> queue = new LinkedList<>();
 
-        for (char c : degree.keySet()) {
-            if (degree.get(c) == 0) {
-                q.add(c);
+        for (Map.Entry<Character, Integer> entry : degree.entrySet()) {
+            if (entry.getValue() == 0) {
+                queue.offer(entry.getKey());
             }
         }
 
-        while (!q.isEmpty()) {
-            char c = q.remove();
-            result += c;
-            if (map.containsKey(c)) {
-                for (char c2 : map.get(c)) {
-                    degree.put(c2, degree.get(c2) - 1);
-                    if (degree.get(c2) == 0) q.add(c2);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                char cur = queue.poll();
+                sb.append(cur);
+                if (map.containsKey(cur)) {
+                    for (char c : map.get(cur)) {
+                        degree.put(c, degree.get(c) - 1);
+                        if (degree.get(c) == 0) {
+                            queue.offer(c);
+                        }
+                    }
                 }
             }
         }
 
-        if (result.length() != degree.size()) {
+        if (sb.length() != degree.size()) { // important
             return "";
         }
 
-        return result;
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+//        System.out.println(alienOrder(new String[]{"wrt", "wrf", "wra", "er", "ett", "eta"}));
+//        alienOrder(new String[]{"abc", "ab"});
+//        alienOrder(new String[]{"abc", "abc"});
+        System.out.println(alienOrder(new String[]{"z", "x", "a", "zb", "zx"}));
     }
 }

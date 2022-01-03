@@ -25,7 +25,7 @@ public class LC0090_SubsetsII {
              * 1a
              * 1a -> 2a
              * 1a -> 2a -> 2b
-             * 1a -> 2b (nums[i] == nums[i - 1])
+             * 1a -> 2b (nums[i] == nums[i - 1]) so it is not good
              */
             if (i == start || nums[i] != nums[i - 1]) {
                 path.add(nums[i]);

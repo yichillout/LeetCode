@@ -9,10 +9,12 @@ public class LC0560_SubarraySumEqualsK {
      * k = 3
      * nums :          [1, 2, 3, -1, 1]
      * prefixSum :  [0 ,1, 3, 6,  5, 6]
-     *                     3-0=3
-     *                        6-3=3
-     *                               6-3=3
+     *                     3-3=0 (freq of 0 is 1)
+     *                        6-3=3 (freq of 3 is 1)
+     *                               6-3=3 (freq of 3 is 1)
      * map: {0:1,1:1,3:1,5:1,6:2}
+     *
+     * result : 3
      *
      * 1. Hashmap<sum[0,i - 1], frequency>
      * 2. sum[i, j] = sum[0, j] - sum[0, i - 1]   --> sum[0, i - 1] = sum[0, j] - sum[i, j]

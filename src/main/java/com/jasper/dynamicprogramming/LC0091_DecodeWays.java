@@ -2,7 +2,15 @@ package com.jasper.dynamicprogramming;
 
 public class LC0091_DecodeWays {
 
-    public int numDecodings(String s) {
+    /**
+     * solution 1 : DP
+     * dp: 0 1 2 3
+     *       2 6 6
+     *     1 1 2 2
+     *       B F F
+     *         Z F
+     */
+    public int numDecodings1(String s) {
         char[] ss = s.toCharArray();
 
         int[] dp = new int[ss.length + 1];
@@ -28,5 +36,30 @@ public class LC0091_DecodeWays {
         }
 
         return dp[dp.length - 1];
+    }
+
+
+    public int numDecodings2(String s) {
+        return s.length() == 0 ? 0 : numDecodings(0, s);
+    }
+
+    private int numDecodings(int p, String s) {
+        int n = s.length();
+
+        if (p == n) {
+            return 1;
+        }
+
+        if (s.charAt(p) == '0') {
+            return 0;
+        }
+
+        int res = numDecodings(p + 1, s);
+
+        if (p + 1 < n && (s.charAt(p) == '1' || s.charAt(p) == '2' && s.charAt(p + 1) < '7')) {
+            res += numDecodings(p + 2, s);
+        }
+
+        return res;
     }
 }
