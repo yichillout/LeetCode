@@ -16,7 +16,7 @@ public class LC0523_ContinuousSubarraySum {
     // solution 1
     public static boolean checkSubarraySum(int[] nums, int k) {
 
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>(); // <remainder, index>
         map.put(0, -1);
 
         int runningSum = 0;

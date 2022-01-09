@@ -2,7 +2,33 @@ package com.jasper.array;
 
 public class LC0042_TrappingRainWater {
 
-    public int trap(int[] height) {
+    // solution 1
+    public int trap1(int[] height) {
+        int l = 0;
+        int r = height.length - 1;
+
+        int maxLeft = 0;
+        int maxRight = 0;
+
+        int sum = 0;
+        while (l < r) {
+            maxLeft = Math.max(height[l], maxLeft);
+            maxRight = Math.max(height[r], maxRight);
+
+            if (height[l] <= height[r]) {
+                sum += maxLeft - height[l];
+                l++;
+            } else {
+                sum += maxRight - height[r];
+                r--;
+            }
+        }
+
+        return sum;
+    }
+
+    // solution 2
+    public int trap2(int[] height) {
         int[] left = new int[height.length];
         int[] right = new int[height.length];
 

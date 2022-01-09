@@ -5,7 +5,6 @@ import java.util.Stack;
 public class LC0227_BasicCalculatorII {
 
     public int calculate(String s) {
-
         if (s == null || s.length() == 0) {
             return 0;
         }

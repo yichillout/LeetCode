@@ -2,9 +2,7 @@ package com.jasper.binarysearch;
 
 public class LC0162_FindPeakElement {
 
-    // solution 1 : important
-    public int findPeakElement1(int[] nums) {
-
+    public int findPeakElement(int[] nums) {
         int l = 0;
         int r = nums.length - 1;
 
@@ -17,25 +15,6 @@ public class LC0162_FindPeakElement {
             }
         }
 
-
         return nums[r] > nums[l] ? r : l;
     }
-
-    // solution 2
-    public int findPeakElement2(int[] nums) {
-
-        int lo = 0;
-        int hi = nums.length - 1;
-
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (nums[mid] > nums[mid + 1]) {
-                hi = mid;
-            } else {
-                lo = mid + 1;
-            }
-        }
-        return lo;
-    }
-
 }

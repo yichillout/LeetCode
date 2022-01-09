@@ -19,7 +19,11 @@ public class LC0560_SubarraySumEqualsK {
      * 1. Hashmap<sum[0,i - 1], frequency>
      * 2. sum[i, j] = sum[0, j] - sum[0, i - 1]   --> sum[0, i - 1] = sum[0, j] - sum[i, j]
      *        k          sum      hashmap-key     -->  hashmap-key   =   sum          k
+     *
+     *    time : O(n)
+     *    space : O(n)
      */
+
 
     public int subarraySum(int[] nums, int k) {
         if(nums == null || nums.length == 0) {
