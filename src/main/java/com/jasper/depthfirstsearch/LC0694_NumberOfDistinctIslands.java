@@ -6,9 +6,7 @@ import java.util.Set;
 public class LC0694_NumberOfDistinctIslands {
 
     public int numDistinctIslands(int[][] grid) {
-
         Set<String> set = new HashSet<>();
-
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] != 0) {
@@ -18,7 +16,6 @@ public class LC0694_NumberOfDistinctIslands {
                 }
             }
         }
-
         return set.size();
     }
 

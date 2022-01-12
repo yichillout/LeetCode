@@ -4,25 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 class OrderedStream {
-
-    int ptr;
-    String[] res;
+    int curIndex;
+    String[] data;
 
     public OrderedStream(int n) {
-        ptr = 0;
-        res = new String[n];
+        data = new String[n];
     }
 
-    public List<String> insert(int id, String value) {
-        List<String> list = new ArrayList<>();
+    public List<String> insert(int idKey, String value) {
+        List<String> res = new ArrayList<>();
 
-        res[id - 1] = value;
-        while (ptr < res.length && res[ptr] != null) {
-            list.add(res[ptr]);
-            ptr++;
+        data[idKey - 1] = value;
+        while (curIndex < data.length && data[curIndex] != null) {
+            res.add(data[curIndex]);
+            curIndex++;
         }
 
-        return list;
+        return res;
     }
 }
 

@@ -12,57 +12,52 @@ import java.util.*;
 public class LC0399_EvaluateDivision {
 
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        double[] result = new double[queries.size()];
 
-        HashMap<String, Map<String, Double>> map = new HashMap<>();
-
+        Map<String, Map<String, Double>> map = new HashMap<>();
         for (int i = 0; i < equations.size(); i++) {
-            List<String> equation = equations.get(i);
+            String str1 = equations.get(i).get(0);
+            String str2 = equations.get(i).get(1);
 
-            if (!map.containsKey(equation.get(0))) {
-                map.put(equation.get(0), new HashMap<>());
+            if (!map.containsKey(str1)) {
+                map.put(str1, new HashMap<>());
             }
 
-            if (!map.containsKey(equation.get(1))) {
-                map.put(equation.get(1), new HashMap<>());
+            if (!map.containsKey(str2)) {
+                map.put(str2, new HashMap<>());
             }
 
-            map.get(equation.get(0)).put(equation.get(1), values[i]);
-            map.get(equation.get(1)).put(equation.get(0), 1 / values[i]);
+            map.get(str1).put(str2, values[i]);
+            map.get(str2).put(str1, 1 / values[i]);
         }
 
-        double[] result = new double[queries.size()];
         for (int i = 0; i < queries.size(); i++) {
             result[i] = helper(queries.get(i).get(0), queries.get(i).get(1), map, new HashSet<>(), 1.0);
         }
 
         return result;
-
     }
 
-    public double helper(String start, String end, HashMap<String, Map<String, Double>> map, Set<String> visited, double num) {
+    public double helper(String cur, String end, Map<String, Map<String, Double>> map, Set<String> visited, double num) {
 
-        if (!map.containsKey(start)) {
+        if (!map.containsKey(cur)) {
             return -1.0;
         }
 
-        if (map.get(start).containsKey(end)) {
-            return map.get(start).get(end) * num;
+        if (map.get(cur).containsKey(end)) {
+            return num * map.get(cur).get(end);
         }
 
-        double result = -1.0;
-        visited.add(start);
-        for (String neighor : map.get(start).keySet()) {
-            if (!visited.contains(neighor)) {
-                visited.add(neighor);
-                result = helper(neighor, end, map, visited, num * map.get(start).get(neighor));
-                visited.remove(neighor);
-
+        visited.add(cur);
+        for (String next : map.get(cur).keySet()) {
+            if (!visited.contains(next)) {
+                double result = helper(next, end, map, visited, num * map.get(cur).get(next));
                 if (result != -1) {
                     return result;
                 }
             }
         }
 
-        return result;
+        return -1.0;
     }
 }
