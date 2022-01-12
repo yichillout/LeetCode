@@ -16,17 +16,17 @@ class LRUCache {
         }
     }
 
-    int capacity;
     Node head;
     Node tail;
     Map<Integer, Node> map;
+    int capacity;
 
     public LRUCache(int capacity) {
-        this.capacity = capacity;
         head = new Node(-1, -1);
         tail = new Node(-1, -1);
         head.next = tail;
         tail.prev = head;
+        this.capacity = capacity;
         map = new HashMap<>();
     }
 
@@ -36,41 +36,40 @@ class LRUCache {
             moveToFirst(node);
             return node.value;
         }
-
         return -1;
     }
 
     public void put(int key, int value) {
         if (map.containsKey(key)) {
             Node node = map.get(key);
-            node.value = value;
             moveToFirst(node);
+            node.value = value;
         } else {
-            Node newNode = new Node(key, value);
-            map.put(key, newNode);
-            attachToFirst(newNode);
+            Node node = new Node(key, value);
+            map.put(key, node);
+            addToFirst(node);
         }
 
         if (map.size() > capacity) {
-            moveLast();
+            removeLast();
         }
     }
 
     public void moveToFirst(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
-        attachToFirst(node);
+        addToFirst(node);
     }
 
-    public void attachToFirst(Node node) {
-        Node tmp = head.next;
+    public void addToFirst(Node node) {
+        Node firstNode = head.next;
         head.next = node;
         node.prev = head;
-        node.next = tmp;
-        tmp.prev = node;
+        node.next = firstNode;
+        firstNode.prev = node;
     }
 
-    public void moveLast() {
+    public void removeLast() {
         Node lastNode = tail.prev;
         lastNode.prev.next = tail;
         tail.prev = lastNode.prev;

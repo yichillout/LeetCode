@@ -7,50 +7,52 @@ import java.util.List;
 
 public class FindTheDeepest {
 
-    public static List<String> getString(String str) {
-        List<String> res = new ArrayList();
-        if (str.length() == 0) {
+    public static List<String> test(String str) {
+        List<String> res = new ArrayList<>();
+
+        if (str == null || str.length() == 0) {
             return res;
         }
 
-        int count = 0;
-        int max = maxCount(str);
-        String tmp = "";
+        int maxDepth = getMaxDepth(str);
+        int depth = 0;
+        StringBuilder sb = new StringBuilder();
         for (char c : str.toCharArray()) {
             if (c == '(' || c == '{' || c == '[') {
-                count++;
-                tmp = "";
+                depth++;
+                sb = new StringBuilder();
             } else if (c == ')' || c == '}' || c == ']') {
-                if (count == max) {
-                    res.add(tmp);
+                if (depth == maxDepth) {
+                    res.add(sb.toString());
                 }
-                count--;
+                sb = new StringBuilder();
+                depth--;
             } else {
-                tmp += c;
+                sb.append(c);
             }
         }
 
         return res;
-
     }
 
-    private static int maxCount(String str) {
-        int count = 0;
-        int max = 0;
+    public static int getMaxDepth(String str) {
+        int res = 0;
+        int depth = 0;
         for (char c : str.toCharArray()) {
             if (c == '(' || c == '{' || c == '[') {
-                count++;
-                max = Math.max(count, max);
+                depth++;
+                if (depth > res) {
+                    res = depth;
+                }
             } else if (c == ')' || c == '}' || c == ']') {
-
-                count--;
+                depth--;
             }
-
         }
-        return max;
+
+        return res;
     }
 
     public static void main(String[] args) {
-        System.out.println(getString("abc(def[gh[c]i]jkl)mno"));
+        System.out.println(test("abc(def[gh[c]i[ddd]]jkl)mn[((eeee))]o"));
     }
 }

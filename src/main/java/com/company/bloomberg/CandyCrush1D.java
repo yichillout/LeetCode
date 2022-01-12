@@ -6,34 +6,27 @@ public class CandyCrush1D {
 
     public String solution(String s) {
         Stack<Character> stack = new Stack<>();
-        Stack<Integer> occurrence = new Stack<>();
-        for (int i = 0; i < s.length(); ) {
-            char c = s.charAt(i);
-            if (stack.isEmpty() || c != stack.peek()) {
-                if (!stack.isEmpty() && occurrence.peek() >= 3) {
-                    stack.pop();
-                    occurrence.pop();
-                } else {
-                    stack.push(c);
-                    occurrence.push(1);
-                    i++;
-                }
+        Stack<Integer> stackCount = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            if (stack.isEmpty() || stack.peek() != s.charAt(i)) {
+                stack.push(s.charAt(i));
+                stackCount.push(1);
             } else {
-                int count = occurrence.pop();
-                occurrence.push(count + 1);
-                i++;
+                if (stackCount.peek() == 3 - 1) {
+                    stack.pop();
+                    stackCount.pop();
+                } else {
+                    stackCount.push(stackCount.pop() + 1);
+                }
             }
         }
 
-        if (occurrence.peek() >= 3) {
-            stack.pop();
-            occurrence.pop();
-        }
-
         StringBuilder sb = new StringBuilder();
+
         while (!stack.isEmpty()) {
+            int count = stackCount.pop();
             char c = stack.pop();
-            int count = occurrence.pop();
             while (count > 0) {
                 sb.append(c);
                 count--;
