@@ -8,110 +8,127 @@ import java.util.Set;
 
 class AllOne {
 
-    private Bucket head;
-    private Bucket tail;
-    // for accessing a specific Bucket among the Bucket list in O(1) time
-    private Map<Integer, Bucket> countBucketMap;
-    // keep track of count of keys
-    private Map<String, Integer> keyCountMap;
+    // keyCount
+    // hello=1
+    // hello=2
+    // hello=2, leet=1
+    // hello=2, leet=1, hi=1
+    // hello=2, leet=1, hi=2
+    // hello=2, leet=1, hi=3
 
-    // each Bucket contains all the keys with the same count
-    private class Bucket {
+    // countKeys
+    // head - tail
+    // head - 1=[hello] - tail
+    // head - 2=[hello] - tail
+    // head - 1=[leet,hi] - 2=[hello] - tail
+    // head - 1=[leet] - 2=[hello,hi] - tail
+    // head - 1=[leet] - 2=[hello] - 3=[hi] - tail
+
+    class Node {
         int count;
-        Set<String> keySet;
-        Bucket next;
-        Bucket pre;
+        Set<String> keys;
 
-        public Bucket(int cnt) {
-            count = cnt;
-            keySet = new HashSet<>();
+        Node prev;
+        Node next;
+
+        public Node(int count) {
+            this.count = count;
+            this.keys = new HashSet<>();
         }
     }
+
+    Node head;
+    Node tail;
+    Map<String, Integer> keyCount;
+    Map<Integer, Node> countKeys;
 
     public AllOne() {
-        head = new Bucket(Integer.MIN_VALUE);
-        tail = new Bucket(Integer.MAX_VALUE);
+        head = new Node(Integer.MIN_VALUE);
+        tail = new Node(Integer.MAX_VALUE);
         head.next = tail;
-        tail.pre = head;
-        countBucketMap = new HashMap<>();
-        keyCountMap = new HashMap<>();
+        tail.prev = head;
+        keyCount = new HashMap<>();
+        countKeys = new HashMap<>();
     }
 
-
     public void inc(String key) {
-        if (keyCountMap.containsKey(key)) {
-            changeKey(key, 1);
-        } else {
-            keyCountMap.put(key, 1);
-            if (head.next.count != 1) {
-                addBucketAfter(new Bucket(1), head);
-            }
-            head.next.keySet.add(key);
-            countBucketMap.put(1, head.next);
+        int oldCount = keyCount.getOrDefault(key, 0);
+        keyCount.put(key, oldCount + 1);
+        int count = keyCount.get(key);
+
+        if (!countKeys.containsKey(count)) {
+            countKeys.put(count, new Node(count));
+        }
+
+        Node node = countKeys.get(count);
+        node.keys.add(key);
+
+        Node oldNode = head;
+        if (oldCount > 0) {
+            oldNode = countKeys.get(oldCount);
+            oldNode.keys.remove(key);
+        }
+
+        if (node.keys.size() == 1) {
+            node.next = oldNode.next;
+            node.prev = oldNode;
+            oldNode.next.prev = node;
+            oldNode.next = node;
+        }
+
+        if (oldNode != head && oldNode.keys.size() == 0) {
+            oldNode.prev.next = node;
+            node.prev = oldNode.prev;
         }
     }
 
-
     public void dec(String key) {
-        if (keyCountMap.containsKey(key)) {
-            int count = keyCountMap.get(key);
-            if (count == 1) {
-                keyCountMap.remove(key);
-                removeKeyFromBucket(countBucketMap.get(count), key);
-            } else {
-                changeKey(key, -1);
+        if (!keyCount.containsKey(key)) {
+            return;
+        }
+
+        int oldCount = keyCount.get(key);
+
+        int count = oldCount - 1;
+        keyCount.put(key, count);
+
+        Node node = head;
+        if (count > 0) {
+            if (!countKeys.containsKey(count)) {
+                countKeys.put(count, new Node(count));
             }
+            node = countKeys.get(count);
+            node.keys.add(key);
+        }
+
+        Node oldNode = countKeys.get(oldCount);
+        oldNode.keys.remove(key);
+
+        if (node.keys.size() == 1) {
+            node.next = oldNode;
+            node.prev = oldNode.prev;
+            oldNode.prev.next = node;
+            oldNode.prev = node;
+        }
+
+        if (oldNode != tail && oldNode.keys.size() == 0) {
+            oldNode.next.prev = node;
+            node.next = oldNode.next;
         }
     }
 
     public String getMaxKey() {
-        return tail.pre == head ? "" : (String) tail.pre.keySet.iterator().next();
+        if (tail.prev.keys.size() == 0) {
+            return "";
+        }
+        return tail.prev.keys.iterator().next();
     }
-
 
     public String getMinKey() {
-        return head.next == tail ? "" : (String) head.next.keySet.iterator().next();
-    }
-
-    private void changeKey(String key, int offset) {
-        int count = keyCountMap.get(key);
-        keyCountMap.put(key, count + offset);
-        Bucket curBucket = countBucketMap.get(count);
-        Bucket newBucket;
-        if (countBucketMap.containsKey(count + offset)) {
-            // target Bucket already exists
-            newBucket = countBucketMap.get(count + offset);
-        } else {
-            // add new Bucket
-            newBucket = new Bucket(count + offset);
-            countBucketMap.put(count + offset, newBucket);
-            addBucketAfter(newBucket, offset == 1 ? curBucket : curBucket.pre);
+        if (head.next.keys.size() == 0) {
+            return "";
         }
-        newBucket.keySet.add(key);
-        removeKeyFromBucket(curBucket, key);
-    }
-
-    private void removeKeyFromBucket(Bucket bucket, String key) {
-        bucket.keySet.remove(key);
-        if (bucket.keySet.size() == 0) {
-            removeBucketFromList(bucket);
-            countBucketMap.remove(bucket.count);
-        }
-    }
-
-    private void removeBucketFromList(Bucket bucket) {
-        bucket.pre.next = bucket.next;
-        bucket.next.pre = bucket.pre;
-        bucket.next = null;
-        bucket.pre = null;
-    }
-
-    // add newBucket after preBucket
-    private void addBucketAfter(Bucket newBucket, Bucket preBucket) {
-        newBucket.pre = preBucket;
-        newBucket.next = preBucket.next;
-        preBucket.next.pre = newBucket;
-        preBucket.next = newBucket;
+        return head.next.keys.iterator().next();
     }
 }
 

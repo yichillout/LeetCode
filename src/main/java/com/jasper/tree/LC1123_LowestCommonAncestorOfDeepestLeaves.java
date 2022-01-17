@@ -34,26 +34,33 @@ public class LC1123_LowestCommonAncestorOfDeepestLeaves {
     }
 
     // solution 2
-    public TreeNode lcaDeepestLeaves2(TreeNode root) {
-        if (root == null) {
-            return null;
-        }
+    class Pair {
+        TreeNode node;
+        int d;
 
-        int left = height(root.left);
-        int right = height(root.right);
-        if (left == right) {
-            return root;
-        } else if (left > right) {
-            return lcaDeepestLeaves2(root.left);
-        } else {
-            return lcaDeepestLeaves2(root.right);
+        Pair(TreeNode node, int d) {
+            this.node = node;
+            this.d = d;
         }
     }
 
-    private int height(TreeNode root) {
+    public TreeNode lcaDeepestLeaves2(TreeNode root) {
+        Pair p = getLca(root, 0);
+        return p.node;
+    }
+
+    private Pair getLca(TreeNode root, int d) {
         if (root == null) {
-            return 0;
+            return new Pair(null, d);
         }
-        return 1 + Math.max(height(root.left), height(root.right));
+
+        Pair l = getLca(root.left, d + 1);
+        Pair r = getLca(root.right, d + 1);
+
+        if (l.d == r.d) {
+            return new Pair(root, l.d);
+        }
+
+        return l.d > r.d ? l : r;
     }
 }

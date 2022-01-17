@@ -4,29 +4,28 @@ import com.common.TreeNode;
 
 public class LC1644_LowestCommonAncestorOfABinaryTreeII {
 
-    boolean pFound = false;
-    boolean qFound = false;
+    int count = 0;
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        TreeNode LCA = LCA(root, p, q);
-        return pFound && qFound ? LCA : null;
+        TreeNode lca = dfs(root, p, q);
+        return count == 2 ? lca : null;
     }
 
-    public TreeNode LCA(TreeNode node, TreeNode p, TreeNode q) {
+    public TreeNode dfs(TreeNode node, TreeNode p, TreeNode q) {
         if (node == null) {
-            return null;
+            return node;
         }
 
-        TreeNode left = LCA(node.left, p, q);
-        TreeNode right = LCA(node.right, p, q);
+        TreeNode left = dfs(node.left, p, q);
+        TreeNode right = dfs(node.right, p, q);
 
         if (node == p) {
-            pFound = true;
+            count++;
             return node;
         }
 
         if (node == q) {
-            qFound = true;
+            count++;
             return node;
         }
 
@@ -34,6 +33,6 @@ public class LC1644_LowestCommonAncestorOfABinaryTreeII {
             return node;
         }
 
-        return left == null ? right : left;
+        return left != null ? left : right;
     }
 }
