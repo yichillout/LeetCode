@@ -23,7 +23,7 @@ public class LC0256_PaintHouse {
                         continue;
                     }
 
-                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][k] + costs[i - 1][k]);
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][k] + costs[i - 1][j]);
                 }
             }
         }

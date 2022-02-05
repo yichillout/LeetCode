@@ -6,43 +6,44 @@ public class LC0451_SortCharactersByFrequency {
 
     /**
      * solution 1 : Bucket sort
-     *
+     * <p>
      * tree -> [0 -> [], 1 -> [t, r], 2 -> [e], 3 - >[], 4 -> []]
-     *
      */
     public String frequencySort(String s) {
-        Map<Character, Integer> frequencyForNum = new HashMap<>();
 
-        for (char c : s.toCharArray()) {
-            frequencyForNum.put(c, frequencyForNum.getOrDefault(c, 0) + 1);
+        Map<Character, Integer> freqs = new HashMap<>();
+
+        for (Character c : s.toCharArray()) {
+            freqs.put(c, freqs.getOrDefault(c, 0) + 1);
         }
 
+        List<Character>[] buckets = new ArrayList[s.length() + 1];
 
-        List<Character>[] frequencyBucket = new ArrayList[s.length() + 1];
-
-        for (char c : frequencyForNum.keySet()) {
-            int f = frequencyForNum.get(c);
-            if (frequencyBucket[f] == null) {
-                frequencyBucket[f] = new ArrayList<>();
+        for (Map.Entry<Character, Integer> entry : freqs.entrySet()) {
+            if (buckets[entry.getValue()] == null) {
+                buckets[entry.getValue()] = new ArrayList<>();
             }
-            frequencyBucket[f].add(c);
+
+            buckets[entry.getValue()].add(entry.getKey());
         }
 
-        StringBuilder str = new StringBuilder();
-
-        for (int i = frequencyBucket.length - 1; i >= 0; i--) {
-            if (frequencyBucket[i] == null) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = buckets.length - 1; i >= 0; i--) {
+            if (buckets[i] == null) {
                 continue;
             }
 
-            for (char c : frequencyBucket[i]) {
-                for (int j = 0; j < i; j++) {
-                    str.append(c);
+            for (int j = 0; j < buckets[i].size(); j++) {
+                char c = buckets[i].get(j);
+                int count = 0;
+                while (count < i) {
+                    sb.append(c);
+                    count++;
                 }
             }
         }
 
-        return str.toString();
+        return sb.toString();
     }
 
 

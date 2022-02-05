@@ -2,6 +2,9 @@ package com.jasper.slidingwindow;
 
 public class LC0424_LongestRepeatingCharacterReplacement {
 
+
+
+    // solution 2
     public int characterReplacement(String s, int k) {
         if (s == null || s.length() == 0) {
             return 0;

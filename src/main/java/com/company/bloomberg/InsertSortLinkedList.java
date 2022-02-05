@@ -1,7 +1,5 @@
 package com.company.bloomberg;
 
-import com.sun.xml.internal.bind.marshaller.NoEscapeHandler;
-
 class InsertSortLinkedList {
 
     class Node {
@@ -10,20 +8,17 @@ class InsertSortLinkedList {
 
         Node(int d) {
             data = d;
-            next = null;
         }
     }
 
     Node head;
 
     void sortedInsert(Node newNode) {
-        Node cur;
-
         if (head == null || head.data >= newNode.data) {
             newNode.next = head;
             head = newNode;
         } else {
-            cur = head;
+            Node cur = head;
             while (cur.next != null && cur.next.data < newNode.data) {
                 cur = cur.next;
             }
@@ -45,21 +40,44 @@ class InsertSortLinkedList {
         }
     }
 
+    // practice
+    public void sortedInsert1(Node newNode) {
+        // TODO
+    }
+
     public static void main(String args[]) {
+//        InsertSortLinkedList list = new InsertSortLinkedList();
+//        Node newNode;
+//        newNode = list.newNode(5);
+//        list.sortedInsert(newNode);
+//        newNode = list.newNode(10);
+//        list.sortedInsert(newNode);
+//        newNode = list.newNode(7);
+//        list.sortedInsert(newNode);
+//        newNode = list.newNode(3);
+//        list.sortedInsert(newNode);
+//        newNode = list.newNode(1);
+//        list.sortedInsert(newNode);
+//        newNode = list.newNode(9);
+//        list.sortedInsert(newNode);
+//        System.out.println("Created Linked List");
+//        list.printList();
+
+        // practice
         InsertSortLinkedList list = new InsertSortLinkedList();
         Node newNode;
         newNode = list.newNode(5);
-        list.sortedInsert(newNode);
+        list.sortedInsert1(newNode);
         newNode = list.newNode(10);
-        list.sortedInsert(newNode);
+        list.sortedInsert1(newNode);
         newNode = list.newNode(7);
-        list.sortedInsert(newNode);
+        list.sortedInsert1(newNode);
         newNode = list.newNode(3);
-        list.sortedInsert(newNode);
+        list.sortedInsert1(newNode);
         newNode = list.newNode(1);
-        list.sortedInsert(newNode);
+        list.sortedInsert1(newNode);
         newNode = list.newNode(9);
-        list.sortedInsert(newNode);
+        list.sortedInsert1(newNode);
         System.out.println("Created Linked List");
         list.printList();
     }

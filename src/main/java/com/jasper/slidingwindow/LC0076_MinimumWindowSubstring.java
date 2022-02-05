@@ -12,48 +12,49 @@ public class LC0076_MinimumWindowSubstring {
      * count=4
      * "ADOBECEBANC"
      * output="BECEBA"
-     *
-     * 0   A : count=3 -> [A=0,B=2,C=1]  -> j=0
-     * 1   D : count=3 -> [A=0,B=2,C=1]  -> j=0
-     * 2   O : count=3 -> [A=0,B=2,C=1]  -> j=0
-     * 3   B : count=2 -> [A=0,B=1,C=1]  -> j=0
-     * 4   E : count=2 -> [A=0,B=1,C=1]  -> j=0
-     * 5   C : count=1 -> [A=0,B=1,C=0]  -> j=0
-     * 6   E : count=1 -> [A=0,B=1,C=0]  -> j=0
-     * 7   B : count=0 -> [A=0,B=0,C=0]  -> j=0  minStart=0, minLen=7-0+1=7, res=ADOBECEB -> count=1 -> [A=1,B=0,C=0] -> j=1
-     * 8   A : count=0 -> [A=0,B=0,C=0]  -> j=3  minStart=3, minLen=8-3+1=6, res=BECEBA   -> count=1 -> [A=0,B=1,C=0] -> j=4
-     * 9   N : count=1 -> [A=0,B=1,C=0]  -> j=4
-     * 10  C : count=1 -> [A=0,B=1,C=-1] -> j=4
+     * <p>
+     * 0   A : count=3 -> [A=0,B=2,C=1]                      -> j=0
+     * 1   D : count=3 -> [A=0,B=2,C=1,D=-1]                 -> j=0
+     * 2   O : count=3 -> [A=0,B=2,C=1,D=-1,0=-1]            -> j=0
+     * 3   B : count=2 -> [A=0,B=1,C=1,D=-1,0=-1]            -> j=0
+     * 4   E : count=2 -> [A=0,B=1,C=1,D=-1,0=-1,E=-1]       -> j=0
+     * 5   C : count=1 -> [A=0,B=1,C=0,D=-1,0=-1,E=-1]       -> j=0
+     * 6   E : count=1 -> [A=0,B=1,C=0,D=-1,0=-1,E=-2]       -> j=0
+     * 7   B : count=0 -> [A=0,B=0,C=0,D=-1,0=-1,E=-2]       -> j=0  minStart=0, minLen=7-0+1=7, res=ADOBECEB -> count=1 -> [A=1,B=0,C=0,D=-1,0=-1,E=-2] -> j=1 // just keep count > 0
+     * 8   A : count=0 -> [A=0,B=0,C=0,D= 0,O= 0,E=-2]       -> j=3  minStart=3, minLen=8-3+1=6, res=BECEBA   -> count=1 -> [A=0,B=1,C=0,D= 0,O= 0,E=-2] -> j=4 // just keep count > 0
+     * 9   N : count=1 -> [A=0,B=1,C=0,D= 0,O= 0,E=-2,N=-1]  -> j=4
+     * 10  C : count=1 -> [A=0,B=1,C=-1,D= 0,O= 0,E=-2,N=-1] -> j=4
      */
     public String minWindow1(String s, String t) {
-        int[] map = new int[128];
+
+        int[] freqs = new int[256];
+
+        int count = t.length();
+        int minLen = Integer.MAX_VALUE;
+
+        String res = "";
 
         for (char c : t.toCharArray()) {
-            map[c]++;
+            freqs[c]++;
         }
 
         int j = 0;
-        String res = "";
-        int minLen = Integer.MAX_VALUE;
-        int counter = t.length();
-
         for (int i = 0; i < s.length(); i++) {
-            final char c = s.charAt(i);
-            if (map[c] > 0) {
-                counter--;
+            char c = s.charAt(i);
+            if (freqs[c] > 0) {
+                count--;
             }
-            map[c]--;
+            freqs[c]--;
 
-            while (counter == 0) {
-                if (minLen > i - j + 1) {
+            while (count == 0) {
+                if (i - j + 1 < minLen) {
                     minLen = i - j + 1;
                     res = s.substring(j, j + minLen);
                 }
 
-                char c2 = s.charAt(j);
-                map[c2]++;
-                if (map[c2] > 0) {
-                    counter++;
+                freqs[s.charAt(j)]++;
+                if (freqs[s.charAt(j)] > 0) {
+                    count++;
                 }
                 j++;
             }

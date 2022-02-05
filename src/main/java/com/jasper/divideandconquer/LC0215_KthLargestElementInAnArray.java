@@ -32,26 +32,24 @@ public class LC0215_KthLargestElementInAnArray {
         }
 
         int pivot = nums[start];
-        int i = start + 1;
-        int j = start + 1;
 
-        while (j <= end) {
-            if (nums[j] <= pivot) {
+        int j = start + 1;
+        for (int i = start + 1; i <= end; i++) {
+            if (nums[i] <= pivot) {
                 swap(nums, j, i);
-                i++;
+                j++;
             }
-            j++;
         }
 
-        i--;
-        swap(nums, i, start);
+        j--;
+        swap(nums, j, start);
 
-        if (i - start == k) {
-            return nums[i];
-        } else if (i - start < k) {
-            return helper(nums, i + 1, end, k - (i + 1 - start));
+        if (j - start == k) {
+            return pivot;
+        } else if (j - start < k) {
+            return helper(nums, j + 1, end, k - (j - start + 1));
         } else {
-            return helper(nums, start, i - 1, k);
+            return helper(nums, start, j - 1, k);
         }
     }
 

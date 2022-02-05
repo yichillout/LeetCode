@@ -52,39 +52,43 @@ public class LC0347_TopKFrequentElements {
 
 
     // solution 2
-    public int[] topKFrequent2(int[] nums, int k) {
+    public List<String> topKFrequent(String[] words, int k) {
 
-        List<Integer> topKList = new ArrayList<>();
+        List<String> res = new ArrayList<>();
 
-        Map<Integer, Integer> hm = new HashMap<>();
-        List<Integer>[] freqs = new List[nums.length + 1];
+        Map<String, Integer> freqs = new HashMap<>();
 
-        for (int i = 0; i < nums.length; i++) {
-            hm.put(nums[i], hm.getOrDefault(nums[i], 0) + 1);
-        }
-
-        for (Map.Entry<Integer, Integer> entry : hm.entrySet()) {
-            if (freqs[entry.getValue()] == null) {
-                freqs[entry.getValue()] = new ArrayList<>();
-            }
-            freqs[entry.getValue()].add(entry.getKey());
-        }
-
-        for (int i = freqs.length - 1; i >= 0; i--) {
-            if (freqs[i] == null) {
-                continue;
+        PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>((e1, e2) -> {
+            if (e1.getValue() != e2.getValue()) {
+                return e1.getValue() - e2.getValue();
             }
 
-            if (topKList.size() < k) {
-                topKList.addAll(freqs[i]);
+            return e2.getKey().compareTo(e1.getKey());
+        });
+
+        for (String word : words) {
+            freqs.put(word, freqs.getOrDefault(word, 0) + 1);
+        }
+
+        for (Map.Entry<String, Integer> entry : freqs.entrySet()) {
+            pq.offer(entry);
+
+            if (pq.size() > k) {
+                pq.poll();
             }
         }
 
-        int[] result = new int[topKList.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = topKList.get(i);
+        String[] resArray = new String[k];
+        for (int i = resArray.length - 1; i >= 0; i--) {
+            Map.Entry<String, Integer> entry = pq.poll();
+            resArray[i] = entry.getKey();
         }
 
-        return result;
+
+        for (String word : resArray) {
+            res.add(word);
+        }
+
+        return res;
     }
 }

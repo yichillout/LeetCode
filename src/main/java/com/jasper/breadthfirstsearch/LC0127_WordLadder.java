@@ -6,52 +6,44 @@ public class LC0127_WordLadder {
 
     public static int ladderLength(String beginWord, String endWord, List<String> wordList) {
 
-        if (wordList == null || wordList.size() == 0 || endWord == null)
-            return 0;
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
 
-        boolean[] isVisited = new boolean[wordList.size()];
-        Queue<String> q = new LinkedList<>();
+        boolean[] visited = new boolean[wordList.size()];
 
-        int level = 1;
+        int level = 1; // to check when adding to queue
 
-        q.offer(beginWord);
-
-        while (!q.isEmpty()) {
-
-            int size = q.size();
-
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            level++; // to check when adding to queue
             for (int i = 0; i < size; i++) {
-
-                String tmp = q.poll();
-
-                if (endWord.equals(tmp)) {
-                    return level;
-                }
-
+                String str = queue.poll();
                 for (int j = 0; j < wordList.size(); j++) {
-                    if (!isVisited[j] && isNext(tmp, wordList.get(j))) {
-                        q.offer(wordList.get(j));
-                        isVisited[j] = true;
+                    if (!visited[j] && isNext(str, wordList.get(j))) {
+                        visited[j] = true;
+                        if (wordList.get(j).equals(endWord)) {
+                            return level;
+                        }
+                        queue.offer(wordList.get(j));
                     }
                 }
             }
-
-            level++;
         }
 
         return 0;
     }
 
-    public static boolean isNext(String str1, String str2) {
-        int counter = 0;
-        for (int i = 0; i < str1.length(); i++) {
-            if (str1.charAt(i) != str2.charAt(i)) {
-                counter++;
-                if (counter > 1) {
+    public static boolean isNext(String word1, String word2) {
+        int count = 0;
+        for (int i = 0; i < word1.length(); i++) {
+            if (word1.charAt(i) != word2.charAt(i)) {
+                count++;
+                if (count > 1) {
                     return false;
                 }
             }
         }
+
         return true;
     }
 

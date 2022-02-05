@@ -7,21 +7,18 @@ import com.jasper.twopointers.ListNode;
 
 public class LC0206_ReverseLinkedList {
 
-	public ListNode reverseList(ListNode head) {
+    public ListNode reverseList(ListNode head) {
+        ListNode cur = head;
+        ListNode prev = null;
 
-		if (head == null || head.next == null)
-			return head;
+        while (cur != null) {
+            ListNode then = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = then;
+        }
 
-		ListNode prev = null;
-		ListNode cur = head;
-		while (cur != null) {
-			ListNode then = cur.next;
-			cur.next = prev;
-			prev = cur;
-			cur = then;
-		}
-		return prev;
-
-	}
+        return prev;
+    }
 
 }

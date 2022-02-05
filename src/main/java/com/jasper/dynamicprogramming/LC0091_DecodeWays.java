@@ -4,11 +4,11 @@ public class LC0091_DecodeWays {
 
     /**
      * solution 1 : DP
-     * dp: 0 1 2 3
-     *       2 6 6
-     *     1 1 2 2
-     *       B F F
-     *         Z F
+     * dp:    1 1 2 2
+     * index: 0 1 2 3
+     *          2 6 6
+     *          B F F
+     *            Z F
      */
     public int numDecodings1(String s) {
         char[] ss = s.toCharArray();

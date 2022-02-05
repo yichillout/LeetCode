@@ -4,39 +4,56 @@ import java.util.Random;
 
 class Solution {
 
+    int[] prefixSums;
     Random random;
-    int[] wSums;
+    int total;
+
+    /**
+     *  input     : [1, 3]
+     *  prefixSums: [1, 4]
+     *  total     : 4
+     *  random.nextInt(total)
+     *
+     *  0   => 1
+     *  2-3 => 4
+     *
+     *  target = [0, 3]
+     *  find the first number greater than target
+     */
+
 
     public Solution(int[] w) {
         random = new Random();
-        wSums = new int[w.length];
-        int sum = 0;
-        for (int i = 0; i < w.length; i++) {
-            sum += w[i];
-            wSums[i] = sum;
+        total = 0;
+        prefixSums = new int[w.length];
+        for (int i = 0; i < prefixSums.length; i++) {
+            total += w[i];
+            prefixSums[i] = total;
         }
     }
 
-    public int pickIndex() {
-        int n = wSums.length;
-        int idx = random.nextInt(wSums[n - 1]) + 1;
-        int left = 0;
-        int right = n - 1;
 
-        while (left + 1 < right) {
-            int mid = left + (right - left) / 2;
-            if (wSums[mid] < idx) {
-                left = mid;
+
+    public int pickIndex() {
+        int target = random.nextInt(total);
+
+        int l = 0;
+        int r = prefixSums.length - 1;
+
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (prefixSums[mid] > target) {
+                r = mid;
             } else {
-                right = mid;
+                l = mid;
             }
         }
 
-        if(wSums[right] == idx) {
-            return right;
+        if (prefixSums[l] > target) {
+            return l;
         }
 
-        return left;
+        return r;
     }
 }
 

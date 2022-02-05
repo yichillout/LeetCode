@@ -28,8 +28,8 @@ class TinyUrl1 {
 	private Map<String, String> short2Long;
 
 	public TinyUrl1() {
-		long2Short = new HashMap<String, String>();
-		short2Long = new HashMap<String, String>();
+		long2Short = new HashMap<>();
+		short2Long = new HashMap<>();
 	}
 
 	// Encodes a URL to a shortened URL.
@@ -70,8 +70,8 @@ class TinyUrl2 {
 
 	public static int GLOBAL_ID = 0;
 
-	private Map<Integer, String> id2url = new HashMap<Integer, String>();
-	private Map<String, Integer> url2id = new HashMap<String, Integer>();
+	private Map<Integer, String> id2url = new HashMap<>();
+	private Map<String, Integer> url2id = new HashMap<>();
 
 	// Encodes a URL to a shortened URL.
 	public String encode(String longUrl) {

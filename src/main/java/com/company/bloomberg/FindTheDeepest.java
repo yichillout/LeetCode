@@ -52,7 +52,18 @@ public class FindTheDeepest {
         return res;
     }
 
+    // practice
+    public static List<String> test1(String str) {
+       List<String> res = new ArrayList<>();
+
+
+
+       return res;
+    }
+
     public static void main(String[] args) {
-        System.out.println(test("abc(def[gh[c]i[ddd]]jkl)mn[((eeee))]o"));
+//        System.out.println(test("abc(def[gh[c]i[ddd]]jkl)mn[((eeee))]o"));
+        // practice
+        System.out.println(test1("abc(def[gh[c]i[ddd]]jkl)mn[((eeee))]o"));
     }
 }

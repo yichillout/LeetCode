@@ -7,50 +7,55 @@ import com.jasper.common.TreeNode;
 
 public class LC0545_BoundaryOfBinaryTree {
 
-	List<Integer> nodes = new ArrayList<>();
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        res.add(root.val);
+        dfsLeft(res, root.left);
+        dfsLeaves(res, root.left);
+        dfsLeaves(res, root.right);
+        dfsRight(res, root.right);
+        return res;
+    }
 
-	public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+    public void dfsLeft(List<Integer> res, TreeNode node) {
+        if (node == null || (node.left == null && node.right == null)) {
+            return;
+        }
 
-		if (root == null)
-			return nodes;
+        res.add(node.val);
 
-		nodes.add(root.val);
-		leftBoundary(root.left);
-		leaves(root.left);
-		leaves(root.right);
-		rightBoundary(root.right);
+        if (node.left != null) {
+            dfsLeft(res, node.left);
+        } else {
+            dfsLeft(res, node.right);
+        }
+    }
 
-		return nodes;
-	}
+    public void dfsRight(List<Integer> res, TreeNode node) {
+        if (node == null || (node.left == null && node.right == null)) {
+            return;
+        }
 
-	public void leftBoundary(TreeNode root) {
-		if (root == null || (root.left == null && root.right == null))
-			return;
-		nodes.add(root.val);
-		if (root.left == null)
-			leftBoundary(root.right);
-		else
-			leftBoundary(root.left);
-	}
+        if (node.right != null) {
+            dfsRight(res, node.right);
+        } else {
+            dfsRight(res, node.left);
+        }
 
-	public void rightBoundary(TreeNode root) {
-		if (root == null || (root.right == null && root.left == null))
-			return;
-		if (root.right == null)
-			rightBoundary(root.left);
-		else
-			rightBoundary(root.right);
-		nodes.add(root.val); // add after child visit(reverse)
-	}
+        res.add(node.val); // add after child visit(reverse)
+    }
 
-	public void leaves(TreeNode root) {
-		if (root == null)
-			return;
-		if (root.left == null && root.right == null) {
-			nodes.add(root.val);
-			return;
-		}
-		leaves(root.left);
-		leaves(root.right);
-	}
+    public void dfsLeaves(List<Integer> res, TreeNode node) {
+        if (node == null) {
+            return;
+        }
+
+        if (node.left == null && node.right == null) {
+            res.add(node.val);
+            return;
+        }
+
+        dfsLeaves(res, node.left);
+        dfsLeaves(res, node.right);
+    }
 }

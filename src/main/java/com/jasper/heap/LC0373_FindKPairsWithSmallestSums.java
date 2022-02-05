@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 public class LC0373_FindKPairsWithSmallestSums {
 
     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
-        PriorityQueue<int[]> que = new PriorityQueue<>((a, b) -> a[0] + a[1] - b[0] - b[1]);
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> a[0] + a[1] - b[0] - b[1]);
 
         List<List<Integer>> res = new ArrayList<>();
 
@@ -17,14 +17,14 @@ public class LC0373_FindKPairsWithSmallestSums {
 
         int i = 0;
         while (i < nums1.length && i < k) {
-            que.offer(new int[]{nums1[i], nums2[0], 0});
+            queue.offer(new int[]{nums1[i], nums2[0], 0});
             i++;
         }
 
         int count = 0;
 
-        while (!que.isEmpty() && count < k) {
-            int[] cur = que.poll();
+        while (!queue.isEmpty() && count < k) {
+            int[] cur = queue.poll();
 
             List<Integer> tmp = new ArrayList<>();
             tmp.add(cur[0]);
@@ -36,7 +36,7 @@ public class LC0373_FindKPairsWithSmallestSums {
                 continue;
             }
 
-            que.offer(new int[]{cur[0], nums2[cur[2] + 1], cur[2] + 1});
+            queue.offer(new int[]{cur[0], nums2[cur[2] + 1], cur[2] + 1});
         }
 
         return res;
