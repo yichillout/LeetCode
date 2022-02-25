@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class LC0290_WordPattern {
+
 	public boolean wordPattern(String pattern, String str) {
 
 		char[] p = pattern.toCharArray();

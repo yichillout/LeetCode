@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 class AllOne {
 
     // keyToCount
@@ -25,14 +24,12 @@ class AllOne {
     // head - 1,[leet] - 2,[hello] - 3,[hi] - tail
 
     class Node {
-        int count;
         Set<String> keys;
 
         Node prev;
         Node next;
 
-        public Node(int count) {
-            this.count = count;
+        public Node() {
             this.keys = new HashSet<>();
         }
     }
@@ -43,14 +40,13 @@ class AllOne {
     Map<Integer, Node> countToNode;
 
     public AllOne() {
-        head = new Node(Integer.MIN_VALUE);
-        tail = new Node(Integer.MAX_VALUE);
+        head = new Node();
+        tail = new Node();
         head.next = tail;
         tail.prev = head;
         keyToCount = new HashMap<>();
         countToNode = new HashMap<>();
     }
-
 
     public void inc(String key) {
         int oldCount = keyToCount.getOrDefault(key, 0);
@@ -59,7 +55,7 @@ class AllOne {
 
         // add new key to node
         if (!countToNode.containsKey(count)) {
-            countToNode.put(count, new Node(count));
+            countToNode.put(count, new Node());
         }
         Node node = countToNode.get(count);
         node.keys.add(key);
@@ -101,7 +97,7 @@ class AllOne {
             keyToCount.remove(key);
         } else {
             if (!countToNode.containsKey(count)) {
-                countToNode.put(count, new Node(count));
+                countToNode.put(count, new Node());
             }
             node = countToNode.get(count);
             node.keys.add(key);
@@ -141,6 +137,15 @@ class AllOne {
         return head.next.keys.iterator().next();
     }
 }
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
 
 public class LC0432_AllOoneDataStructure {
     /**

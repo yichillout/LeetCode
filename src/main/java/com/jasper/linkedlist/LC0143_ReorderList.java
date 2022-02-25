@@ -2,7 +2,6 @@ package com.jasper.linkedlist;
 
 import com.jasper.twopointers.ListNode;
 
-import java.util.List;
 
 public class LC0143_ReorderList {
 

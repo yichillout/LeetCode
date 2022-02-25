@@ -16,7 +16,7 @@ public class CoolString {
             occurrence[s.charAt(i)]++;
         }
 
-        //step 2: find out how many different occurence of character in the int[128], store in HashMap
+        //step 2: find out how many occurrence of character in the int[128], store in HashMap
         for (int i = 0; i < 128; i++) {
             if (occurrence[i] != 0) {
                 map.put(occurrence[i], map.getOrDefault(occurrence[i], 0) + 1);

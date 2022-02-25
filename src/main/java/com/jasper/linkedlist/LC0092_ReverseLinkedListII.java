@@ -7,45 +7,33 @@ import com.jasper.twopointers.ListNode;
 public class LC0092_ReverseLinkedListII {
 
     // solution 1
-    public ListNode reverseBetween1(ListNode head, int m, int n) {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
 
-        // Empty list
-        if (head == null) {
-            return null;
-        }
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode cur = head;
 
-        // Move the two pointers until they reach the proper starting point
-        // in the list.
-        ListNode cur = head, prev = null;
-        while (m > 1) {
+        int i = 1;
+        while (i < left) {
             prev = cur;
             cur = cur.next;
-            m--;
-            n--;
+            i++;
         }
 
-        // The two pointers that will fix the final connections.
-        ListNode con = prev, tail = cur;
+        ListNode node = prev;
 
-        // Iteratively reverse the nodes until n becomes 0.
-        ListNode third = null;
-        while (n > 0) {
-            third = cur.next;
+        while (i <= right) {
+            ListNode next = cur.next;
             cur.next = prev;
             prev = cur;
-            cur = third;
-            n--;
+            cur = next;
+            i++;
         }
 
-        // Adjust the final connections as explained in the algorithm
-        if (con != null) {
-            con.next = prev;
-        } else {
-            head = prev;
-        }
-
-        tail.next = cur;
-        return head;
+        node.next.next = cur;
+        node.next = prev;
+        return dummy.next;
     }
 
     // solution 2

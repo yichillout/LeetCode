@@ -1,22 +1,38 @@
 package com.jasper.twopointers;
 
+import java.util.Stack;
+
 public class LC1209_RemoveAllAdjacentDuplicatesInStringII {
 
     public String removeDuplicates(String s, int k) {
-        int j = 0;
-        int n = s.length();
-        int[] count = new int[n];
+        Stack<Character> stack = new Stack<>();
+        Stack<Integer> stackCount = new Stack<>();
 
-        char[] stack = s.toCharArray();
-
-        for (int i = 0; i < n; ++i) {
-            stack[j] = stack[i];
-            count[j] = j > 0 && stack[j - 1] == stack[i] ? count[j - 1] + 1 : 1;
-            if (count[j] == k) {
-                j -= k;
+        for (int i = 0; i < s.length(); i++) {
+            if (stack.isEmpty() || stack.peek() != s.charAt(i)) {
+                stack.push(s.charAt(i));
+                stackCount.push(1);
+            } else {
+                if (stackCount.peek() == k - 1) {
+                    stack.pop();
+                    stackCount.pop();
+                } else {
+                    stackCount.push(stackCount.pop() + 1);
+                }
             }
-            j++;
         }
-        return new String(stack, 0, j);
+
+        StringBuilder sb = new StringBuilder();
+
+        while (!stack.isEmpty()) {
+            int count = stackCount.pop();
+            char c = stack.pop();
+            while (count > 0) {
+                sb.append(c);
+                count--;
+            }
+        }
+
+        return sb.reverse().toString();
     }
 }

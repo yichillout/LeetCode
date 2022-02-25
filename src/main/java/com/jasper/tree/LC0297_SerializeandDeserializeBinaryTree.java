@@ -17,39 +17,46 @@ public class LC0297_SerializeandDeserializeBinaryTree {
      * 1,2,#,#,3,4,#,#,5,#,#
      */
 
-    public String serialize1(TreeNode root) {
-        StringBuilder builder = new StringBuilder();
-        serializeHelper(builder, root);
-        return builder.substring(0, builder.length() - 1);
+    // solution 1 : DFS
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeHelper(root, sb);
+        return sb.toString();
     }
 
-    public void serializeHelper(StringBuilder builder, TreeNode node) {
+    public void serializeHelper(TreeNode node, StringBuilder sb) {
         if (node == null) {
-            builder.append("#,");
+            sb.append("#,");
             return;
         }
 
-        builder.append(node.val + ",");
-        serializeHelper(builder, node.left);
-        serializeHelper(builder, node.right);
+        sb.append(node.val + ",");
+
+        serializeHelper(node.left, sb);
+        serializeHelper(node.right, sb);
     }
 
-    public TreeNode deserialize1(String data) {
-        String[] d = data.split(",");
-        int[] index = new int[]{0};
-        return deserializeHelper(d, index);
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        int[] index = new int[1];
+        String[] strs = data.split(",");
+        return deserializeHelper(strs, index);
     }
 
-    public TreeNode deserializeHelper(String[] d, int[] index) {
-        if (d[index[0]].equals("#")) {
+    public TreeNode deserializeHelper(String[] strs, int[] index) {
+
+        if (strs[index[0]].equals("#")) {
+            index[0]++;
             return null;
         }
 
-        TreeNode node = new TreeNode(Integer.parseInt(d[index[0]]));
+        int val = Integer.parseInt(strs[index[0]]);
         index[0]++;
-        node.left = deserializeHelper(d, index);
-        index[0]++;
-        node.right = deserializeHelper(d, index);
+        TreeNode node = new TreeNode(val);
+
+        node.left = deserializeHelper(strs, index);
+        node.right = deserializeHelper(strs, index);
 
         return node;
     }

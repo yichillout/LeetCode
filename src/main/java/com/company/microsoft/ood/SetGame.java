@@ -276,7 +276,7 @@ public class SetGame {
         long runs = 10000;
         int selectionMode = 1;
         long seed = (System.nanoTime() % 1000000000);
-        boolean debug = false;
+        boolean debug = true;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-n")) {
                 runs = Long.parseLong(args[++i]);

@@ -43,33 +43,48 @@ public class LC0239_SlidingWindowMaximum {
         return max;
     }
 
+    /**
+     * Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+     * Output: [3,3,5,5,6,7]
+     * Explanation:
+     * Window position                Max
+     * ---------------               -----
+     * [1  3  -1] -3  5  3  6  7       3
+     * 1 [3  -1  -3] 5  3  6  7       3
+     * 1  3 [-1  -3  5] 3  6  7       5
+     * 1  3  -1 [-3  5  3] 6  7       5
+     * 1  3  -1  -3 [5  3  6] 7       6
+     * 1  3  -1  -3  5 [3  6  7]      7
+     */
+
     // Solution 2 : dequeue
-    public int[] maxSlidingWindow(int[] nums, int k) {
-
-        if (nums.length == 0)
-            return new int[]{};
-
-        // store the index
+    public static int[] maxSlidingWindow(int[] nums, int k) {
+        int[] res = new int[nums.length - k + 1];
         Deque<Integer> dq = new ArrayDeque<>();
 
-        int[] result = new int[nums.length - k + 1];
-
         for (int i = 0; i < k - 1; i++) {
-            inQueue(nums, dq, i);
+            inQueue(dq, nums, i);
         }
 
         for (int i = k - 1; i < nums.length; i++) {
-            inQueue(nums, dq, i);
-            result[i - k + 1] = nums[dq.peekFirst()];
+            inQueue(dq, nums, i);
+            res[i - k + 1] = nums[dq.peekFirst()];
             if (dq.peekFirst() == i - k + 1) {
                 dq.removeFirst();
             }
         }
 
-        return result;
+        return res;
     }
 
-    private void inQueue(int[] nums, Deque<Integer> dq, int pos) {
+    public static void inQueue(Deque<Integer> dq, int[] nums, int index) {
+        while (!dq.isEmpty() && nums[dq.peekLast()] < nums[index]) {
+            dq.removeLast();
+        }
+        dq.addLast(index);
+    }
+
+    private static void inQueue(int[] nums, Deque<Integer> dq, int pos) {
         while (!dq.isEmpty() && nums[dq.peekLast()] < nums[pos]) {
             dq.removeLast();
         }
@@ -77,6 +92,11 @@ public class LC0239_SlidingWindowMaximum {
     }
 
     public static void main(String[] args) {
+        int[] nums = new int[]{1, 3, -1, -3, 5, 3, 6, 7};
+        int k = 3;
+        maxSlidingWindow(nums, 3);
+
+
         Deque<String> deque = new LinkedList<>();
         deque.offerLast("A"); // A
         deque.offerLast("B"); // A <- B

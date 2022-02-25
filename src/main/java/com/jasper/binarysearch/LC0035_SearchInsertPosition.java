@@ -2,48 +2,32 @@ package com.jasper.binarysearch;
 
 public class LC0035_SearchInsertPosition {
 
-	public static int searchInsert(int[] nums, int target) {
+    public static int searchInsert(int[] nums, int target) {
 
-		int lo = 0;
-		int hi = nums.length - 1;
+        int l = 0;
+        int r = nums.length - 1;
 
-		while (lo < hi) {
-			int mid = lo + (hi - lo) / 2;
-			if (target <= nums[mid]) {
-				hi = mid;
-			} else {
-				lo = mid + 1;
-			}
-		}
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] >= target) {
+                r = mid;
+            } else {
+                l = mid;
+            }
+        }
 
-		return nums[lo] >= target ? lo : lo + 1;
-	}
+        if (nums[l] >= target) {
+            return l;
+        } else if (nums[r] >= target) {
+            return r;
+        }
 
-	// important !!!!!
-	public static boolean binarySearch(int[] nums, int target) {
+        return r + 1;
+    }
 
-		int lo = 0;
-		int hi = nums.length - 1;
-
-		while (lo < hi) {
-			int mid = lo + (hi - lo) / 2;
-			if (target <= nums[mid]) {
-				hi = mid;
-			} else {
-				lo = mid + 1;
-			}
-		}
-
-		return nums[lo] == target;
-	}
-
-	public static void main(String[] args) {
-
-		int[] nums = { 1, 3, 5, 6 };
-		int target = 7;
-		//System.out.println(binarySearch(nums, target));
-		System.out.println(searchInsert(nums, target));
-
-	}
-
+    public static void main(String[] args) {
+        int[] nums = {1, 3, 5, 6};
+        int target = 7;
+        System.out.println(searchInsert(nums, target));
+    }
 }

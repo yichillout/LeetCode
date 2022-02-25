@@ -4,37 +4,37 @@ import com.jasper.common.TreeNode;
 
 public class LC0099_RecoverBinarySearchTree {
 
-	TreeNode firstElement = null;
-	TreeNode secondElement = null;
+    TreeNode first = null;
+    TreeNode second = null;
+    TreeNode prev = new TreeNode(Integer.MIN_VALUE);
 
-	TreeNode prevElement = new TreeNode(Integer.MIN_VALUE);
+    public void recoverTree(TreeNode root) {
+        inorderTraversal(root);
+        if (first != null && second != null) {
+            int tmp = first.val;
+            first.val = second.val;
+            second.val = tmp;
+        }
+    }
 
-	public void recoverTree(TreeNode root) {
+    public void inorderTraversal(TreeNode node) {
+        if (node == null) {
+            return;
+        }
 
-		traverse(root);
+        inorderTraversal(node.left);
 
-		int temp = firstElement.val;
-		firstElement.val = secondElement.val;
-		secondElement.val = temp;
-	}
+        if (prev.val > node.val) {
+            if (first == null) {
+                first = prev;
+                second = node;
+            } else {
+                second = node;
+            }
+        }
+        prev = node;
 
-	private void traverse(TreeNode root) {
-
-		if (root == null)
-			return;
-
-		traverse(root.left);
-
-		if (firstElement == null && prevElement.val > root.val) {
-			firstElement = prevElement;
-		}
-
-		if (firstElement != null && prevElement.val > root.val) {
-			secondElement = root;
-		}
-		prevElement = root;
-
-		traverse(root.right);
-	}
+        inorderTraversal(node.right);
+    }
 
 }

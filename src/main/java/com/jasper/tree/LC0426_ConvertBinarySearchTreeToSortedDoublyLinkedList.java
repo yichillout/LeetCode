@@ -30,37 +30,32 @@ public class LC0426_ConvertBinarySearchTreeToSortedDoublyLinkedList {
             return root;
         }
 
-        helper(root);
-
-        prev.right = head;
+        inorderTraveral(root);
         head.left = prev;
+        prev.right = head;
 
         return head;
     }
 
-
-    private void helper(Node node) {
-        if (head == null && node.left == null) {
-            head = node;
+    public void inorderTraveral(Node node) {
+        if (node == null) {
+            return;
         }
 
+        inorderTraveral(node.left);
 
-        if (node.left != null) {
-            helper(node.left);
+        if (head == null) {
+            head = node;
         }
 
         if (prev != null) {
             prev.right = node;
+            node.left = prev;
         }
-
-        node.left = prev;
-
 
         prev = node;
 
-        if (node.right != null) {
-            helper(node.right);
-        }
+        inorderTraveral(node.right);
     }
 
     public static void main(String[] args) {

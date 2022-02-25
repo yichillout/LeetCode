@@ -3,6 +3,7 @@ package com.jasper.binarysearch;
 public class LC0034_SearchforaRange {
 
     public int[] searchRange(int[] nums, int target) {
+
         if (nums == null || nums.length == 0) {
             return new int[]{-1, -1};
         }
@@ -20,6 +21,7 @@ public class LC0034_SearchforaRange {
         }
 
         int index1 = -1;
+
         if (nums[l] == target) {
             index1 = l;
         } else if (nums[r] == target) {
@@ -30,16 +32,15 @@ public class LC0034_SearchforaRange {
             return new int[]{-1, -1};
         }
 
-
         l = index1;
         r = nums.length - 1;
 
         while (l + 1 < r) {
             int mid = l + (r - l) / 2;
-            if (nums[mid] <= target) {
-                l = mid;
-            } else {
+            if (nums[mid] > target) {
                 r = mid;
+            } else {
+                l = mid;
             }
         }
 

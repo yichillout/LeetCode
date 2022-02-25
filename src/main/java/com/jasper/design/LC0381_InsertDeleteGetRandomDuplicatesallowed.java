@@ -4,53 +4,59 @@ import java.util.*;
 
 class RandomizedCollection {
 
-	ArrayList<Integer> result;
-	HashMap<Integer, LinkedHashSet<Integer>> map;
+    Map<Integer, Set<Integer>> map;
+    List<Integer> data;
+    Random random;
 
-	public RandomizedCollection() {
-		result = new ArrayList<Integer>();
-		map = new HashMap<Integer, LinkedHashSet<Integer>>();
-	}
+    public RandomizedCollection() {
+        map = new HashMap<>();
+        data = new ArrayList<>();
+        random = new Random();
+    }
 
-	public boolean insert(int val) {
-		boolean alreadyExists = map.containsKey(val);
-		if (!alreadyExists) {
-			map.put(val, new LinkedHashSet<Integer>());
-		}
-		map.get(val).add(result.size());
-		result.add(val);
-		return !alreadyExists;
-	}
+    public boolean insert(int val) {
+        boolean isContained = map.containsKey(val);
 
-	public boolean remove(int val) {
-		if (!map.containsKey(val)) {
-			return false;
-		}
-		LinkedHashSet<Integer> valSet = map.get(val);
-		int indexToReplace = valSet.iterator().next();
+        if (!isContained) {
+            map.put(val, new HashSet<>());
+        }
 
-		int numAtLastPlace = result.get(result.size() - 1);
-		LinkedHashSet<Integer> replaceWith = map.get(numAtLastPlace);
+        map.get(val).add(data.size());
+        data.add(val);
 
-		result.set(indexToReplace, numAtLastPlace);
+        return !isContained;
+    }
 
-		valSet.remove(indexToReplace);
+    public boolean remove(int val) {
+        if (!map.containsKey(val)) {
+            return false;
+        }
 
-		if (indexToReplace != result.size() - 1) {
-			replaceWith.remove(result.size() - 1);
-			replaceWith.add(indexToReplace);
-		}
-		result.remove(result.size() - 1);
+        Set<Integer> indexSet1 = map.get(val);
+        int index = indexSet1.iterator().next();
 
-		if (valSet.isEmpty()) {
-			map.remove(val);
-		}
-		return true;
-	}
+        int lastData = data.get(data.size() - 1);
+        Set<Integer> indexSet2 = map.get(lastData);
 
-	public int getRandom() {
-		return result.get((int) (Math.random() * result.size()));
-	}
+        data.set(index, lastData);
+
+        indexSet1.remove(index);
+        if (indexSet1.size() == 0) {
+            map.remove(val);
+        }
+
+        if (index != data.size() - 1) {
+            indexSet2.remove(data.size() - 1);
+            indexSet2.add(index);
+        }
+        data.remove(data.size() - 1);
+
+        return true;
+    }
+
+    public int getRandom() {
+        return data.get(random.nextInt(data.size()));
+    }
 }
 
 public class LC0381_InsertDeleteGetRandomDuplicatesallowed {
