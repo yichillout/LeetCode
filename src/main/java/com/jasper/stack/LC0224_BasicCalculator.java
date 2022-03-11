@@ -5,32 +5,35 @@ import java.util.Stack;
 public class LC0224_BasicCalculator {
 
     // solution 1
+
     int i = 0;
 
     public int calculate1(String s) {
+
         Stack<Integer> stack = new Stack<>();
 
+        int num = 0;
         char operator = '+';
 
-        int num = 0;
-
         while (i < s.length()) {
-            char c = s.charAt(i++);
-
-            if (c >= '0' && c <= '9') {
-                num = num * 10 + (c - '0');
-            }
+            char c = s.charAt(i);
+            i++;
 
             if (c == '(') {
-                num = calculate(s);
+                num = calculate1(s);
             }
 
-            if (i == s.length() || c == '+' || c == '-' || c == '*' || c == '/' || c == ')') {
+            if (c >= '0' && c <= '9') {
+                num = num * 10 + c - '0';
+            }
+
+            if (c == '+' || c == '-' || c == ')' || i == s.length()) {
                 if (operator == '+') {
                     stack.push(num);
                 } else if (operator == '-') {
                     stack.push(-num);
                 }
+
                 operator = c;
                 num = 0;
             }
@@ -40,17 +43,16 @@ public class LC0224_BasicCalculator {
             }
         }
 
-        int sum = 0;
-
+        int res = 0;
         while (!stack.isEmpty()) {
-            sum += stack.pop();
+            res += stack.pop();
         }
 
-        return sum;
+        return res;
     }
 
     // solution 2
-    public int calculate(String s) {
+    public int calculate2(String s) {
 
         Stack<Integer> stack = new Stack<>();
         int result = 0;

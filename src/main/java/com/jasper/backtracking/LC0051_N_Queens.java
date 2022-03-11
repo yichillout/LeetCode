@@ -7,7 +7,6 @@ public class LC0051_N_Queens {
 
     public List<List<String>> solveNQueens(int n) {
 
-        List<List<String>> result = new ArrayList<>();
         char[][] board = new char[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -15,41 +14,42 @@ public class LC0051_N_Queens {
             }
         }
 
-        helper(board, 0, result);
-
-        return result;
+        List<List<String>> res = new ArrayList<>();
+        dfs(board, 0, res);
+        return res;
     }
 
-    public void helper(char[][] board, int rowIndex, List<List<String>> result) {
-
+    public void dfs(char[][] board, int rowIndex, List<List<String>> res) {
         if (rowIndex == board.length) {
-            List<String> list = new ArrayList<>();
-            for (char[] b : board) {
-                list.add(new String(b));
-            }
-            result.add(list);
+            res.add(construct(board));
             return;
         }
-
 
         for (int i = 0; i < board[0].length; i++) {
             if (isValid(board, rowIndex, i)) {
                 board[rowIndex][i] = 'Q';
-                helper(board, rowIndex + 1, result);
+                dfs(board, rowIndex + 1, res);
                 board[rowIndex][i] = '.';
             }
         }
     }
 
-    public boolean isValid(char[][] board, int rowIndex, int colIndex) {
-        for (int i = 0; i < rowIndex; i++) {
+    public boolean isValid(char[][] board, int x, int y) {
+        for (int i = 0; i < x; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                if (board[i][j] == 'Q' && (j + rowIndex == i + colIndex || i + j == rowIndex + colIndex || j == colIndex)) {
+                if (board[i][j] == 'Q' && (x + j == y + i || x + y == i + j || y == j)) {
                     return false;
                 }
             }
         }
-
         return true;
+    }
+
+    public List<String> construct(char[][] board) {
+        List<String> res = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            res.add(new String(board[i]));
+        }
+        return res;
     }
 }

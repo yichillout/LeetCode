@@ -3,54 +3,48 @@ package com.jasper.binarysearch;
 public class LC1011_CapacityToShipPackagesWithinDDays {
 
     public int shipWithinDays(int[] weights, int days) {
-
         int sum = 0;
-        int max = Integer.MIN_VALUE;
-        for (int weight : weights) {
+        int max = 0;
+        for(int weight : weights) {
             sum += weight;
-            if (weight > max) {
-                max = weight;
-            }
+            max = Math.max(max, weight);
         }
 
-        int l = max;
-        int r = sum;
+        return binarySearch(weights, days, max, sum);
+    }
 
-        while (l + 1 < r) {
+    public int binarySearch(int[] weights, int days, int low, int high) {
+        int l = low;
+        int r = high;
+
+        while(l + 1 < r) {
             int mid = l + (r - l) / 2;
-            if (isValid(weights, mid, days)) {
+            if(isValid(weights, days, mid)) {
                 r = mid;
             } else {
                 l = mid;
             }
         }
 
-        if (isValid(weights, l, days)) {
-            return l;
-        }
-
-        return r;
+        return isValid(weights, days, l) ? l : r;
     }
 
-    public boolean isValid(int[] weights, int capacity, int days) {
-
+    public boolean isValid(int[] weights, int days, int target) {
         int cur = 0;
-        for (int i = 0; i < weights.length; i++) {
-            cur += weights[i];
+        int count = 1;
 
-            if (cur == capacity) {
-                cur = 0;
-                days--;
-            } else if (cur > capacity) {
-                cur = weights[i];
-                days--;
+        for(int num : weights) {
+            if(cur + num <= target) {
+                cur += num;
+            } else {
+                count++;
+                cur = num;
+                if(count > days) {
+                    return false;
+                }
             }
         }
 
-        if (cur > 0) {
-            days--;
-        }
-
-        return days >= 0;
+        return true;
     }
 }

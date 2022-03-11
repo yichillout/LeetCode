@@ -2,42 +2,49 @@ package com.jasper.binarysearch;
 
 public class LC0410_SplitArrayLargestSum {
 
-	public int splitArray(int[] nums, int m) {
+    public int splitArray(int[] nums, int m) {
+        int sum = 0;
+        int max = 0;
+        for (int num : nums) {
+            sum += num;
+            max = Math.max(max, num);
+        }
 
-		long start = 0;
-		long end = 0;
+        return binarySearch(nums, m, max, sum);
+    }
 
-		for (int num : nums) {
-			start = Math.max(start, num);
-			end += num;
-		}
+    public int binarySearch(int[] nums, int m, int low, int high) {
+        int l = low;
+        int r = high;
 
-		while (start + 1 < end) {
-			long mid = start + (end - start) / 2;
-			if (getNeed(mid, nums) <= m) {
-				end = mid;
-			} else {
-				start = mid;
-			}
-		}
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (isValid(nums, m, mid)) {
+                r = mid;
+            } else {
+                l = mid;
+            }
+        }
 
-		if (getNeed(start, nums) <= m) {
-			return (int) start;
-		}
+        return isValid(nums, m, l) ? l : r;
+    }
 
-		return (int) end;
-	}
+    public boolean isValid(int[] nums, int m, int target) {
+        int cur = 0;
+        int count = 1;
 
-	private int getNeed(long max, int[] nums) {
-		int need = 1;
-		long cur = 0;
-		for (int num : nums) {
-			if (cur + num > max) {
-				need++;
-				cur = 0;
-			}
-			cur += num;
-		}
-		return need;
-	}
+        for (int num : nums) {
+            if (cur + num <= target) {
+                cur += num;
+            } else {
+                count++;
+                cur = num;
+                if (count > m) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
